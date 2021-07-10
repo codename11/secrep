@@ -25,9 +25,6 @@ class CreateDeliveriesTable extends Migration
             $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->foreign("vehicle_id")->references("id")->on("vehicles")->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unsignedBigInteger('cistern_id')->nullable();
-            $table->foreign("cistern_id")->references("id")->on("cisterns")->onUpdate('cascade')->onDelete('cascade');
-
             $table->unsignedBigInteger('operator_id')->nullable();
             $table->foreign("operator_id")->references("id")->on("employees")->onUpdate('cascade')->onDelete('cascade');
 

@@ -19,4 +19,8 @@ class Vehicle extends Model
         return $this->belongsTo("App\User", 'sec_id', "id");
     }
 
+    public function type(){
+        return $this->belongsTo("App\VehiclePivot", 'vehicle_type_id', "id");
+    }
+
 }
