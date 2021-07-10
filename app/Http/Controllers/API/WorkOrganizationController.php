@@ -40,51 +40,14 @@ class WorkOrganizationController extends Controller
             else{
 
                 if($request->isMethod("get")){
-
-                    $vehicleType = VehiclePivot::where("name", "=", $request->type)->first();
-                    
-                    $workOrganizations = WorkOrganization::with("vehicles")->get();
-                    /*$workOrganizations = WorkOrganization::when(!empty($request->type),function ($query) use($request){
-                        $query->whereHas("type", function($query) use($request){
-                            $query->where('name', '=', $request->type);
-                        });
-                    })->with("vehicles", "type")
-                    ->get();*/
-                    $temp = collect();//Create empty collection.
-                    $len1 = count($workOrganizations);
-                    for($i=0;$i<$len1;$i++){
-
-                        $len2 = count($workOrganizations[$i]->vehicles);
-
-                        for($j=0;$j<$len2;$j++){
-
-                            if($workOrganizations[$i]->vehicles[$j]->vehicle_type_id == $vehicleType->id){
-
-                                $workOrganizations[$i]->vehicles[$j]->type = $vehicleType->name;
-                                $temp[$i] = $workOrganizations[$i];
-
-                            }
-                            else{
-
-                                $workOrganizations[$i]->vehicles[$j] = null;
-                                $temp[$i] = $workOrganizations[$i];
-  
-                            }
-
-                        }
-
-                    }
-
-                    $ttt = $temp->toArray();
-
-                    $workOrganizations = $temp;
+                              
+                    $workOrganizations = WorkOrganization::with("vehicles.type")->get();
 
                     $this->authorize('view', $workOrganizations->first());
                     
                     $response = array(
                         "message" => "bravo",
                         "workOrganizations" => $workOrganizations,
-                        "ttt" => $ttt
                     );
                     
                     return response()->json($response);
