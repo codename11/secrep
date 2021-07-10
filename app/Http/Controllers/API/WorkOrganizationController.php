@@ -77,16 +77,6 @@ class WorkOrganizationController extends Controller
 
                     $ttt = $temp->toArray();
 
-                    $rrr = $ttt.map(function($item1, $key1){
-
-                        return $item1["vehicles"].map(function($item2, $key2){
-
-                            return $item2[$key2] != null;
-
-                        });
-
-                    });
-                    $workOrganizations = null;
                     $workOrganizations = $temp;
 
                     $this->authorize('view', $workOrganizations->first());
