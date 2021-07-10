@@ -28,5 +28,7 @@ Route::post('create_vehicle','api\VehiclesController@store')->middleware('auth:a
 Route::get('show_vehicle','api\VehiclesController@show')->middleware('auth:api');
 Route::patch('update_vehicle','api\VehiclesController@update')->middleware('auth:api');
 Route::delete('delete_vehicle','api\VehiclesController@destroy')->middleware('auth:api');
-Route::get('list_trucks','api\VehiclesController@indexTrucks')->middleware('auth:api');
 
+//Work organizations
+Route::post('create_work_organizations','api\WorkOrganizationController@store')->middleware('auth:api');
+Route::get('list_work_organizations','api\WorkOrganizationController@index')->middleware('auth:api');

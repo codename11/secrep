@@ -8,7 +8,7 @@ class Vehicle extends Model
 {
     
     protected $fillable = [
-        'registration', 'sec_id',
+        'registration', 'sec_id', "workOrganization_id"
     ];
 
     public function deliveries(){
@@ -21,6 +21,10 @@ class Vehicle extends Model
 
     public function type(){
         return $this->belongsTo("App\VehiclePivot", 'vehicle_type_id', "id");
+    }
+
+    public function workOrganization(){
+        return $this->belongsTo("App\WorkOrganization", 'workOrganization_id', "id");
     }
 
 }
