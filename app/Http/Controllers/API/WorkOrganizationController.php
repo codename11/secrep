@@ -128,9 +128,7 @@ class WorkOrganizationController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "request" => $request->all(),
-                        "workOrganization" => $workOrganization->with("vehicles")->get(),
-                        "user" => auth()->user()
+                        "workOrganization" => $workOrganization->with("vehicles.type")->get(),
                     );
                     
                     return response()->json($response);
@@ -167,9 +165,43 @@ class WorkOrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        
+        if($request->ajax()){
+
+            if($request->isMethod("get")){
+
+                $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id);
+                $this->authorize('view', $workOrganization);
+                $response = array(
+                    "message" => "bravo",
+                    "workOrganization" => $workOrganization,
+                );
+                
+                return response()->json($response);
+
+            }
+            else{
+
+                $response = array(
+                    "message" => "Method isn't GET.",
+                );
+                
+                return response()->json($response);
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -190,9 +222,72 @@ class WorkOrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+                'name' => 'required|max:255',
+                "sec_id" => "required|numeric"
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("patch")){
+
+                    $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id);
+                    $workOrganization->name = $request->name ? $request->name : $workOrganization->name; 
+                    $workOrganization->sec_id = $request->sec_id ? $request->sec_id : $workOrganization->sec_id;
+                    $this->authorize('update', $workOrganization);
+                    $workOrganization->save();
+    
+                    $response = array(
+                        "message" => "bravo",
+                        "workOrganization" => $workOrganization,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't PATCH.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -201,8 +296,67 @@ class WorkOrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("delete")){
+
+                    $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id); 
+                    $this->authorize('delete', $workOrganization);
+                    $workOrganization->delete();
+
+                    $response = array(
+                        "message" => "bravo",
+                        "workOrganization" => $workOrganization,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't PATCH.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 }

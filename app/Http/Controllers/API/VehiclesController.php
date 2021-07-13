@@ -142,9 +142,7 @@ class VehiclesController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "request" => $request->all(),
                         "vehicle" => $vehicle->with("type")->get(),
-                        "user" => auth()->user()
                     );
                     
                     return response()->json($response);
@@ -190,6 +188,7 @@ class VehiclesController extends Controller
 
                 //$vehicle = Vehicle::with("deliveries")->find($request->id);
                 $vehicle = Vehicle::with("type", "workOrganization")->find($request->id);
+                $this->authorize('view', $vehicle);
                 $response = array(
                     "message" => "bravo",
                     "vehicle" => $vehicle,
@@ -201,7 +200,7 @@ class VehiclesController extends Controller
             else{
 
                 $response = array(
-                    "message" => "Method isn't POST.",
+                    "message" => "Method isn't GET.",
                 );
                 
                 return response()->json($response);
@@ -276,9 +275,7 @@ class VehiclesController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "request" => $request->all(),
                         "vehicle" => $vehicle,
-                        "user" => auth()->user()
                     );
                     
                     return response()->json($response);
@@ -343,14 +340,12 @@ class VehiclesController extends Controller
                 if($request->isMethod("delete")){
 
                     $vehicle = Vehicle::with("type")->find($request->id); 
-                    $this->authorize('update', $vehicle);
+                    $this->authorize('delete', $vehicle);
                     $vehicle->delete();
 
                     $response = array(
                         "message" => "bravo",
-                        "request" => $request->all(),
                         "vehicle" => $vehicle,
-                        "user" => auth()->user()
                     );
                     
                     return response()->json($response);
