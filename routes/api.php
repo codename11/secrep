@@ -35,3 +35,10 @@ Route::get('list_work_organizations','api\WorkOrganizationController@index')->mi
 Route::get('show_work_organization','api\WorkOrganizationController@show')->middleware('auth:api');
 Route::patch('update_work_organization','api\WorkOrganizationController@update')->middleware('auth:api');
 Route::delete('delete_work_organization','api\WorkOrganizationController@destroy')->middleware('auth:api');
+
+//Employees
+Route::post('create_employee','api\EmployeesController@store')->middleware('auth:api');
+Route::get('list_employees','api\EmployeesController@index')->middleware('auth:api');
+Route::get('show_employee','api\EmployeesController@show')->middleware('auth:api');
+Route::patch('update_employee','api\EmployeesController@update')->middleware('auth:api');
+Route::delete('delete_employee','api\EmployeesController@destroy')->middleware('auth:api');

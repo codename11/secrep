@@ -338,7 +338,7 @@ class WorkOrganizationController extends Controller
                 else{
 
                     $response = array(
-                        "message" => "Method isn't PATCH.",
+                        "message" => "Method isn't DELETE.",
                     );
                     
                     return response()->json($response);
