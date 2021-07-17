@@ -42,3 +42,7 @@ Route::get('list_employees','api\EmployeesController@index')->middleware('auth:a
 Route::get('show_employee','api\EmployeesController@show')->middleware('auth:api');
 Route::patch('update_employee','api\EmployeesController@update')->middleware('auth:api');
 Route::delete('delete_employee','api\EmployeesController@destroy')->middleware('auth:api');
+
+//Deliveries
+Route::post('create_delivery','api\DeliveriesController@store')->middleware('auth:api');
+Route::get('list_deliveries','api\DeliveriesController@index')->middleware('auth:api');

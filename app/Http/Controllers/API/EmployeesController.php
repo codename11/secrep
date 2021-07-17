@@ -22,7 +22,7 @@ class EmployeesController extends Controller
 
             if($request->isMethod("get")){
                             
-                $employees = Employee::with("work_organization", "enteredBy")->get();
+                $employees = Employee::with("work_organization", "enteredBy", "deliveries")->get();
 
                 $this->authorize('view', $employees->first());
                 

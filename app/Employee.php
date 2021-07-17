@@ -22,4 +22,8 @@ class Employee extends Model
         return $this->belongsTo("App\User",'sec_id');
     }
 
+    public function deliveries(){
+        return $this->hasMany("App\Delivery",'operator_id');
+    }
+
 }

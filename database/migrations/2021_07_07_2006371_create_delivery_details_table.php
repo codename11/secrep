@@ -19,7 +19,7 @@ class CreateDeliveryDetailsTable extends Migration
             $table->unsignedBigInteger('delivery_id')->nullable();
             $table->foreign("delivery_id")->references("id")->on("deliveries")->onUpdate('cascade')->onDelete('cascade');
 
-            $table->string('delivery_number');
+            $table->string('delivery_note');
 
             $table->unsignedBigInteger('sec_id')->nullable();
             $table->foreign("sec_id")->references("id")->on("users")->onUpdate('cascade')->onDelete('cascade');
