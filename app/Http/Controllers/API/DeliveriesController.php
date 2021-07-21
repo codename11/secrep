@@ -8,6 +8,7 @@ use App\Delivery;
 use Illuminate\Support\Facades\Validator;
 use App\Complement;
 use App\Delivery_details;
+use App\Vehicle;
 
 class DeliveriesController extends Controller
 {
@@ -121,32 +122,57 @@ class DeliveriesController extends Controller
 
                     $delivery->save();
 
+                    $ifToManyTrucks = 0;
                     foreach($request->vehicles as $key => $value){
 
-                        $complement = new Complement;
-                        $complement->delivery_id = $delivery->id;
-                        $complement->vehicle_id = $value;
-                        $complement->sec_id = auth()->user()->id;
-                        $complement->save();
+                        $tmp1 = Vehicle::with("type")->find($value)->type->id;
+                        if($tmp1 == 1){
+
+                            $ifToManyTrucks++;
+
+                        }
 
                     }
-
-                    foreach($request->delivery_notes as $key => $value){
-
-                        $delivery_details = new Delivery_details;
-                        $delivery_details->delivery_id = $delivery->id;
-                        $delivery_details->delivery_note = $value;
-                        $delivery->sec_id = auth()->user()->id;
-                        $delivery_details->save();
-
-                    }
-    
-                    $response = array(
-                        "message" => "bravo",
-                        "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
-                    );
                     
-                    return response()->json($response);
+                    if($ifToManyTrucks == 1){
+
+                        foreach($request->vehicles as $key => $value){
+
+                            $complement = new Complement;
+                            $complement->delivery_id = $delivery->id;
+                            $complement->vehicle_id = $value;
+                            $complement->sec_id = auth()->user()->id;
+                            $complement->save();
+    
+                        }
+    
+                        foreach($request->delivery_notes as $key => $value){
+    
+                            $delivery_details = new Delivery_details;
+                            $delivery_details->delivery_id = $delivery->id;
+                            $delivery_details->delivery_note = $value;
+                            $delivery->sec_id = auth()->user()->id;
+                            $delivery_details->save();
+    
+                        }
+        
+                        $response = array(
+                            "message" => "bravo",
+                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
+                        );
+                        
+                        return response()->json($response);
+
+                    }
+                    else{
+
+                        $response = array(
+                            "message" => "Your delivery complement has to many trucks! Delivery entry aborted.",
+                        );
+                        
+                        return response()->json($response);
+
+                    }
     
                 }
                 else{
