@@ -46,3 +46,9 @@ Route::delete('delete_employee','api\EmployeesController@destroy')->middleware('
 //Deliveries
 Route::post('create_delivery','api\DeliveriesController@store')->middleware('auth:api');
 Route::get('list_deliveries','api\DeliveriesController@index')->middleware('auth:api');
+Route::get('show_delivery','api\DeliveriesController@show')->middleware('auth:api');
+Route::patch('update_delivery','api\DeliveriesController@update')->middleware('auth:api');
+Route::delete('delete_delivery','api\DeliveriesController@destroy')->middleware('auth:api');
+
+//Special_Permissions
+Route::get('list_special_permissions','api\Special_PermissionsController@index')->middleware('auth:api');

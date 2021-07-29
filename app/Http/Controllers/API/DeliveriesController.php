@@ -206,9 +206,44 @@ class DeliveriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        
+        if($request->ajax()){
+
+            if($request->isMethod("get")){
+
+                $delivery = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($request->id);
+                $this->authorize('view', $delivery);
+                
+                $response = array(
+                    "message" => "bravo",
+                    "delivery" => $delivery,
+                );
+                
+                return response()->json($response);
+
+            }
+            else{
+
+                $response = array(
+                    "message" => "Method isn't GET.",
+                );
+                
+                return response()->json($response);
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -229,9 +264,159 @@ class DeliveriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => 'required|numeric',
+                'load_place' => 'max:255',
+                "unload_place" => 'max:255',
+                "comment" => 'max:255',
+                'time_in' => 'date_format:H:i',
+                'time_out' => 'date_format:H:i',
+                "vehicles" => 'array',
+                "vehicles.*" => "integer",
+                'operator_id' => 'numeric',
+                'sec_id' => 'numeric'
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("patch")){
+
+                    $delivery = Delivery::find($request->id);
+                    $delivery->load_place = $request->load_place ? $request->load_place : $delivery->load_place;
+                    $delivery->unload_place = $request->unload_place ? $request->unload_place : $delivery->unload_place; 
+                    $delivery->comment = $request->comment ? $request->comment : $delivery->comment;  
+                    $delivery->time_in = $request->time_in ? $request->time_in : $delivery->time_in; 
+                    $delivery->time_out = $request->time_out ? $request->time_out : $delivery->time_out;
+
+                    $delivery->operator_id = $request->operator_id ? $request->operator_id : $delivery->operator_id;
+                    $delivery->sec_id = auth()->user()->id; 
+                    $this->authorize('update', $delivery);
+
+                    $delivery->save();
+
+                    $ifToManyTrucks = 0;
+                    foreach($request->vehicles as $key => $value){
+
+                        $tmp1 = Vehicle::with("type")->find($value)->type->id;
+                        if($tmp1 == 1){
+
+                            $ifToManyTrucks++;
+
+                        }
+
+                    }
+                    
+                    if($ifToManyTrucks == 1){
+
+                        foreach($request->vehicles as $key => $value){
+
+                            $complement = Complement::where("vehicle_id", "=", $value)->where("delivery_id", "=", $delivery->id)->first();
+                            
+                            if($complement){
+
+                                $complement->delivery_id = $delivery->id ? $delivery->id : $complement->delivery_id;
+                                $complement->vehicle_id = $value ? $value : $complement->vehicle_id;
+                                $complement->sec_id = auth()->user()->id;
+                                $complement->save();
+
+                            }
+                            else{
+
+                                $response = array(
+                                    "message" => "There no such complement.",
+                                );
+                                
+                                return response()->json($response);
+
+                            }
+    
+                        }
+    
+                        foreach($request->delivery_notes as $key => $value){
+    
+                            $delivery_details = Delivery_details::where("delivery_id", "=", $delivery->id)->first();
+
+                            if($delivery_details){
+
+                                $delivery_details->delivery_id = $delivery->id ? $delivery->id : $delivery_details->delivery_id;
+                                $delivery_details->delivery_note = $value ? $value : $delivery_details->delivery_note;
+                                $delivery->sec_id = auth()->user()->id;
+                                $delivery_details->save();
+
+                            }
+                            else{
+
+                                $response = array(
+                                    "message" => "There no such delivery_details.",
+                                );
+                                
+                                return response()->json($response);
+
+                            }
+    
+                        }
+        
+                        $response = array(
+                            "message" => "bravo",
+                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
+                        );
+                        
+                        return response()->json($response);
+
+                    }
+                    else{
+
+                        $response = array(
+                            "message" => "Your delivery complement has to many trucks! Delivery entry aborted.",
+                        );
+                        
+                        return response()->json($response);
+
+                    }
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't PATCH.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+        
     }
 
     /**
@@ -240,8 +425,68 @@ class DeliveriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("delete")){
+
+                    $delivery = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($request->id); 
+                    $this->authorize('delete', $delivery);
+                    $delivery->delete();
+
+                    $response = array(
+                        "message" => "bravo",
+                        "delivery" => $delivery,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't DELETE.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
+
 }
