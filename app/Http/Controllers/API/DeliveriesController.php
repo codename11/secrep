@@ -25,7 +25,6 @@ class DeliveriesController extends Controller
             if($request->isMethod("get")){
                             
                 $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get();
-
                 $this->authorize('view', $deliveries->first());
                 
                 $response = array(
