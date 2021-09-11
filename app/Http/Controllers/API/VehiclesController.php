@@ -182,30 +182,52 @@ class VehiclesController extends Controller
     public function show(Request $request)
     {
         
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required|numeric',
+            ]
+        );
+        $errors = $validation->errors();
+
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($validation->fails()){
 
-                //$vehicle = Vehicle::with("deliveries")->find($request->id);
-                $vehicle = Vehicle::with("type", "workOrganization")->find($request->id);
-                $this->authorize('view', $vehicle);
                 $response = array(
-                    "message" => "bravo",
-                    "vehicle" => $vehicle,
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
                 );
-                
                 return response()->json($response);
 
             }
             else{
 
-                $response = array(
-                    "message" => "Method isn't GET.",
-                );
-                
-                return response()->json($response);
-            }
+                if($request->isMethod("get")){
 
+                    //$vehicle = Vehicle::with("deliveries")->find($request->id);
+                    $vehicle = Vehicle::with("type", "workOrganization")->find($request->id);
+                    $this->authorize('view', $vehicle);
+                    $response = array(
+                        "message" => "bravo",
+                        "vehicle" => $vehicle,
+                    );
+                    
+                    return response()->json($response);
+
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't GET.",
+                    );
+                    
+                    return response()->json($response);
+                }
+
+            }
+                
         }
         else{
 

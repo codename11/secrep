@@ -73,7 +73,70 @@ class Special_PermissionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'permission_name' => 'required|max:255',
+                "permission_description" => 'required|max:255',
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("post")){
+
+                    $specialPermission = new Special_Permission;
+                    $specialPermission->permission_name = $request->permission_name;
+                    $specialPermission->permission_description = $request->permission_description;
+
+                    $this->authorize('create', $specialPermission);
+                    $specialPermission->save();
+
+                    $response = array(
+                        "message" => "bravo",
+                        "specialPermission" => $specialPermission->with("user", "vehicles")->get(),
+                    );
+                    
+                    return response()->json($response);
+
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't POST.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -82,9 +145,65 @@ class Special_PermissionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required|numeric',
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("get")){
+
+                    $specialPermission = Special_Permission::with("user", "vehicles")->find($request->id);
+                    $this->authorize('view', $specialPermission);
+                    $response = array(
+                        "message" => "bravo",
+                        "specialPermission" => $specialPermission,
+                    );
+                    
+                    return response()->json($response);
+
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't GET.",
+                    );
+                    
+                    return response()->json($response);
+                }
+
+            }
+                
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -105,9 +224,72 @@ class Special_PermissionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+                'permission_name' => 'max:255',
+                "permission_description" => 'max:255',
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("patch")){
+
+                    $specialPermission = Special_Permission::with("user", "vehicles")->find($request->id);
+                    $specialPermission->permission_name = $request->permission_name ? $request->permission_name : $specialPermission->permission_name; 
+                    $specialPermission->permission_description = $request->permission_description ? $request->permission_description : $specialPermission->permission_description;   
+                    $this->authorize('update', $specialPermission);
+                    $specialPermission->save();
+    
+                    $response = array(
+                        "message" => "bravo",
+                        "specialPermission" => $specialPermission,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't PATCH.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 
     /**
@@ -116,8 +298,67 @@ class Special_PermissionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+            ]
+        );
+        $errors = $validation->errors();
+
+        if($request->ajax()){
+
+            if($validation->fails()){
+
+                $response = array(
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
+                );
+                return response()->json($response);
+
+            }
+            else{
+
+                if($request->isMethod("delete")){
+
+                    $specialPermission = Special_Permission::with("user", "vehicles")->find($request->id); 
+                    $this->authorize('delete', $specialPermission);
+                    $specialPermission->delete();
+
+                    $response = array(
+                        "message" => "bravo",
+                        "specialPermission" => $specialPermission,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+
+                    $response = array(
+                        "message" => "Method isn't DELETE.",
+                    );
+                    
+                    return response()->json($response);
+
+                }
+
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
     }
 }

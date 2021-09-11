@@ -14,11 +14,11 @@ class Special_Permission extends Model
 
 
     public function user(){
-        return $this->hasMany("App\User", 'permission_id', "id");
+        return $this->hasMany("App\User", 'special_permission_id', "id");
     }
 
     public function vehicles(){
-        return $this->hasMany("App\Vehicle", 'permission_id', "id");
+        return $this->hasMany("App\Vehicle", 'special_permission_id', "id");
     }
 
 }

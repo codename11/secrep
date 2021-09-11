@@ -52,3 +52,7 @@ Route::delete('delete_delivery','api\DeliveriesController@destroy')->middleware(
 
 //Special_Permissions
 Route::get('list_special_permissions','api\Special_PermissionsController@index')->middleware('auth:api');
+Route::post('create_special_permissions','api\Special_PermissionsController@store')->middleware('auth:api');
+Route::patch('update_special_permissions','api\Special_PermissionsController@update')->middleware('auth:api');
+Route::get('show_special_permissions','api\Special_PermissionsController@show')->middleware('auth:api');
+Route::delete('delete_special_permissions','api\Special_PermissionsController@destroy')->middleware('auth:api');
