@@ -25,7 +25,7 @@ class Delivery implements Rule
      */
     public function passes($attribute, $value)
     {
-        if($value === "delivery" || $value === "enteredBy" || $value === "complement"){//Ovo su relationship-i iz modela.
+        if($value === "operator" || $value === "enteredBy" || $value === "complement"){//Ovo su relationship-i iz modela.
             return true;
         }
         else{
