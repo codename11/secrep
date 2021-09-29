@@ -48,4 +48,24 @@ class User extends Authenticatable
         return $this->hasMany("App\Vehicle", "sec_id", "id");
     }
 
+    public function deliveries(){
+        return $this->hasMany("App\Delivery", "sec_id", "id");
+    }
+
+    public function complement(){
+        return $this->hasMany("App\Complement", "sec_id", "id");
+    }
+
+    public function delivery_details(){
+        return $this->hasMany("App\Delivery_details", "sec_id", "id");
+    }
+
+    public function special_permissions(){
+        return $this->hasOne("App\Special_Permission", "sec_id", "id");
+    }
+
+    public function employees(){
+        return $this->hasMany("App\Employee", "sec_id", "id");
+    }
+    
 }

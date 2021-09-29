@@ -12,4 +12,8 @@ class VehiclePivot extends Model
         'name'
     ];
 
+    public function vehicles(){
+        return $this->hasMany("App\Vehicle", "vehicle_type_id", "id");
+    }
+
 }

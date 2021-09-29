@@ -56,3 +56,6 @@ Route::post('create_special_permissions','api\Special_PermissionsController@stor
 Route::patch('update_special_permissions','api\Special_PermissionsController@update')->middleware('auth:api');
 Route::get('show_special_permissions','api\Special_PermissionsController@show')->middleware('auth:api');
 Route::delete('delete_special_permissions','api\Special_PermissionsController@destroy')->middleware('auth:api');
+
+//Custom report
+Route::get('test','api\CustomReportsController@show')->middleware('auth:api');

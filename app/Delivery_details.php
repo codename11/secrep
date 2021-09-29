@@ -12,4 +12,13 @@ class Delivery_details extends Model
         'delivery_note',
         "sec_id"
     ];
+
+    public function delivery(){
+        return $this->belongsTo("App\Delivery",'delivery_id');
+    }
+
+    public function enteredBy(){
+        return $this->belongsTo("App\User",'sec_id');
+    }
+    
 }

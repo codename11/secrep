@@ -21,4 +21,8 @@ class Special_Permission extends Model
         return $this->hasMany("App\Vehicle", 'special_permission_id', "id");
     }
 
+    public function employees(){
+        return $this->hasMany("App\Employee", 'special_permission_id', "id");
+    }
+
 }
