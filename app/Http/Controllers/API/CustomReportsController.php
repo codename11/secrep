@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers\DateHelper;
 use App\Vehicle;
+use App\User;
 use App\Rules\Vehicles;
 use App\Rules\isObject;
 use App\Rules\Models;
@@ -50,31 +51,80 @@ class CustomReportsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function getModels(){
+
+        return [
+            "Complement" => [
+                "deliveries", 
+                "user", 
+                "type", 
+                "workOrganization"
+            ], 
+            "Delivery_details" => [
+                "delivery",
+                "enteredBy",
+            ], 
+            "Delivery" => [
+                "operator",
+                "enteredBy",
+                "complement"
+            ], 
+            "Employee" => [
+                "work_organization",
+                "enteredBy",
+                "deliveries"
+            ], 
+            "Role" => [
+                "users"
+            ], 
+            "Special_Permission" => [
+                "user",
+                "vehicles",
+                "employees"
+            ], 
+            "User" => [
+                "role",
+                "vehicles",
+                "deliveries",
+                "complement",
+                "delivery_details",
+                "special_permissions",
+                "employees"
+            ], 
+            "Vehicle" => [
+                "deliveries",
+                "user",
+                "type",
+                "workOrganization"
+            ], 
+            "VehiclePivot" => [
+                "vehicles"
+            ], 
+            "WorkOrganization" => [
+                "vehicles",
+                "employees",
+                "user"
+            ]
+        ];
+
+    }
+    public function vehicles(Request $request)
     {
-
-        /*$dates = new \stdClass();
-
-        $start_date = new DateHelper($request->start_date);
-        $dates->start_date = $start_date->checkIfDate();
-
-        $end_date = new DateHelper($request->end_date);
-        $dates->end_date = $end_date->checkIfDate();*/
-
+        
         $validation = Validator::make(
             $request->all(),
             [
                 'start_date' => 'required|date_format:d/m/Y',
                 "end_date" => 'required|date_format:d/m/Y',
                 "models" => "array",
-                "models.*" => [new Models],
+                "models.*" => "array",
                 "optional_parameters" => "array",
                 "optional_parameters.*" => "array",
                 "optional_parameters.*.*" => "string"
             ]
         );
         $errors = $validation->errors();
-        //Mozda je bolje da se dozvoli pretraga samo jednog modela sa datumima.
+        
         if($request->ajax()){
 
             if($validation->fails()){
@@ -102,9 +152,21 @@ class CustomReportsController extends Controller
                     $dates->end_date = $end_date;
 
                     $models = $request->models;
+                    $myModels = (new CustomReportsController())->getModels();
+
+                    $keys = [];
+                    $values = [];
+                    foreach ($models[0]["Vehicle"] as $key => $value) {
+                        array_push($keys, $key);
+                        array_push($values, $value);
+                    }
+                    //Vehicle::whereBetween("updated_at", [$dates->start_date, $dates->end_date])->with("deliveries", "user", "type", "workOrganization", 1, 1, 1, 1)->get(),
                     $response = array(
                         "message" => "bravo",
-                        "dates" => $dates
+                        "vehicles" => Vehicle::whereBetween("updated_at", [$dates->start_date, $dates->end_date])->with("deliveries", "user", "type", "workOrganization")->get(),
+                        //"test" => User::find("1")->vehicles
+                        "keys" => $keys,
+                        "values" => $values
                     );
                     
                     return response()->json($response);

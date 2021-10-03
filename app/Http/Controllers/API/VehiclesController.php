@@ -206,7 +206,6 @@ class VehiclesController extends Controller
 
                 if($request->isMethod("get")){
 
-                    //$vehicle = Vehicle::with("deliveries")->find($request->id);
                     $vehicle = Vehicle::with("type", "workOrganization")->find($request->id);
                     $this->authorize('view', $vehicle);
                     $response = array(
