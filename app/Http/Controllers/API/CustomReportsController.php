@@ -9,8 +9,6 @@ use App\Http\Helpers\DateHelper;
 use App\Vehicle;
 use App\User;
 use App\Rules\Vehicles;
-use App\Rules\isObject;
-use App\Rules\Models;
 
 class CustomReportsController extends Controller
 {
@@ -53,74 +51,76 @@ class CustomReportsController extends Controller
      */
     public function getModels(){
 
-        return [
-            "Complement" => [
-                "deliveries", 
-                "user", 
-                "type", 
-                "workOrganization"
-            ], 
-            "Delivery_details" => [
-                "delivery",
-                "enteredBy",
-            ], 
-            "Delivery" => [
-                "operator",
-                "enteredBy",
-                "complement"
-            ], 
-            "Employee" => [
-                "work_organization",
-                "enteredBy",
-                "deliveries"
-            ], 
-            "Role" => [
-                "users"
-            ], 
-            "Special_Permission" => [
-                "user",
-                "vehicles",
-                "employees"
-            ], 
-            "User" => [
-                "role",
-                "vehicles",
-                "deliveries",
-                "complement",
-                "delivery_details",
-                "special_permissions",
-                "employees"
-            ], 
-            "Vehicle" => [
-                "deliveries",
-                "user",
-                "type",
-                "workOrganization"
-            ], 
-            "VehiclePivot" => [
-                "vehicles"
-            ], 
-            "WorkOrganization" => [
-                "vehicles",
-                "employees",
-                "user"
-            ]
-        ];
+        $response = array(
+            "ModelsWithRelationships" => [
+                "Complement" => [
+                    "deliveries", 
+                    "user", 
+                    "type", 
+                    "workOrganization"
+                ], 
+                "Delivery_details" => [
+                    "delivery",
+                    "enteredBy",
+                ], 
+                "Delivery" => [
+                    "operator",
+                    "enteredBy",
+                    "complement"
+                ], 
+                "Employee" => [
+                    "work_organization",
+                    "enteredBy",
+                    "deliveries"
+                ], 
+                "Role" => [
+                    "users"
+                ], 
+                "Special_Permission" => [
+                    "user",
+                    "vehicles",
+                    "employees"
+                ], 
+                "User" => [
+                    "role",
+                    "vehicles",
+                    "deliveries",
+                    "complement",
+                    "delivery_details",
+                    "special_permissions",
+                    "employees"
+                ], 
+                "Vehicle" => [
+                    "deliveries",
+                    "user",
+                    "type",
+                    "workOrganization"
+                ], 
+                "VehiclePivot" => [
+                    "vehicles"
+                ], 
+                "WorkOrganization" => [
+                    "vehicles",
+                    "employees",
+                    "user"
+                ]
+            ],
+        );
+        
+        return response()->json($response);
 
     }
+
     public function vehicles(Request $request)
     {
         
         $validation = Validator::make(
             $request->all(),
             [
-                'start_date' => 'required|date_format:d/m/Y',
-                "end_date" => 'required|date_format:d/m/Y',
+                'start_date' => 'date_format:d/m/Y',
+                "end_date" => 'date_format:d/m/Y',
                 "models" => "array",
-                "models.*" => "array",
-                "optional_parameters" => "array",
-                "optional_parameters.*" => "array",
-                "optional_parameters.*.*" => "string"
+                "models.*" => "array"
             ]
         );
         $errors = $validation->errors();
@@ -141,32 +141,30 @@ class CustomReportsController extends Controller
 
                 if($request->isMethod("get")){
 
-                    $d1 = new DateHelper($request->start_date);
-                    $d2 = new DateHelper($request->end_date);
+                    $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
+                    $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
 
-                    $start_date = $d1->checkIfDate();
-                    $end_date = $d2->checkIfDate();
+                    $start_date = $d1 != null ? $d1->checkIfDate() : null;
+                    $end_date = $d2 != null ? $d2->checkIfDate() : null;
 
                     $dates = new \stdClass();
                     $dates->start_date = $start_date;
                     $dates->end_date = $end_date;
 
-                    $models = $request->models;
-                    $myModels = (new CustomReportsController())->getModels();
+                    /*$myModels = (new CustomReportsController())->getModels();*/
 
-                    $keys = [];
-                    $values = [];
-                    foreach ($models[0]["Vehicle"] as $key => $value) {
-                        array_push($keys, $key);
-                        array_push($values, $value);
-                    }
-                    //Vehicle::whereBetween("updated_at", [$dates->start_date, $dates->end_date])->with("deliveries", "user", "type", "workOrganization", 1, 1, 1, 1)->get(),
+                    $vehicles = Vehicle::with(...$request->Vehicle)
+                        ->when($dates->start_date, function ($query, $date) {
+                            $query->where('updated_at', '>=', $date);
+                        })
+                        ->when($dates->end_date, function ($query, $date) {
+                            $query->where('updated_at', '<=', $date);
+                        })
+                        ->get();
+                        
                     $response = array(
                         "message" => "bravo",
-                        "vehicles" => Vehicle::whereBetween("updated_at", [$dates->start_date, $dates->end_date])->with("deliveries", "user", "type", "workOrganization")->get(),
-                        //"test" => User::find("1")->vehicles
-                        "keys" => $keys,
-                        "values" => $values
+                        "vehicles" => $vehicles,
                     );
                     
                     return response()->json($response);
