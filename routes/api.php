@@ -57,6 +57,6 @@ Route::patch('update_special_permissions','api\Special_PermissionsController@upd
 Route::get('show_special_permissions','api\Special_PermissionsController@show')->middleware('auth:api');
 Route::delete('delete_special_permissions','api\Special_PermissionsController@destroy')->middleware('auth:api');
 
-//Custom report
+//Custom report(simplified)
 Route::get('getModels','api\CustomReportsController@getModels')->middleware('auth:api');
 Route::get('vehicles','api\CustomReportsController@vehicles')->middleware('auth:api');
