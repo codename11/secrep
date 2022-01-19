@@ -11,12 +11,12 @@ class Vehicle extends Model
         'registration', 'sec_id', "workOrganization_id"
     ];
 
-    public function deliveries(){
-        return $this->belongsTo("App\Delivery",'vehicle_id');
-    }
-
     public function user(){
         return $this->belongsTo("App\User", 'sec_id', "id");
+    }
+
+    public function complements(){
+        return $this->hasMany("App\Complement", 'vehicle_id', "id");
     }
 
     public function type(){
@@ -25,6 +25,10 @@ class Vehicle extends Model
 
     public function workOrganization(){
         return $this->belongsTo("App\WorkOrganization", 'workOrganization_id', "id");
+    }
+
+    public function deliveries(){
+        return $this->belongsToMany("App\Delivery", "App\Complement", "vehicle_id", "delivery_id");
     }
 
 }

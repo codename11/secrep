@@ -29,4 +29,8 @@ class Delivery extends Model
         return $this->hasMany("App\Complement", 'delivery_id');
     }
 
+    public function employees(){
+        return $this->belongsTo("App\Employee", 'operator_id', "id");
+    }
+
 }

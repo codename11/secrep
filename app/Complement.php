@@ -16,4 +16,8 @@ class Complement extends Model
         return $this->belongsTo("App\Vehicle", 'vehicle_id');
     }
 
+    public function deliveries(){
+        return $this->belongsTo("App\Delivery", 'delivery_id', "id");
+    }
+
 }

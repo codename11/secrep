@@ -153,18 +153,32 @@ class CustomReportsController extends Controller
 
                     /*$myModels = (new CustomReportsController())->getModels();*/
 
-                    $vehicles = Vehicle::with(...$request->Vehicle)
+                    if($request->vehicle_id && Vehicle::find($request->vehicle_id)){
+                        
+                        $vehicles = Vehicle::with("complements.deliveries.employees", ...$request->Vehicle)
                         ->when($dates->start_date, function ($query, $date) {
                             $query->where('updated_at', '>=', $date);
                         })
                         ->when($dates->end_date, function ($query, $date) {
                             $query->where('updated_at', '<=', $date);
+                        })->find($request->vehicle_id);
+
+                    }
+                    else{
+
+                        $vehicles = Vehicle::with("complements.deliveries.employees", ...$request->Vehicle)
+                        ->when($dates->start_date, function ($query, $date) {
+                            $query->where('updated_at', '>=', $date);
                         })
-                        ->get();
+                        ->when($dates->end_date, function ($query, $date) {
+                            $query->where('updated_at', '<=', $date);
+                        })->get();
+
+                    }
                         
                     $response = array(
                         "message" => "bravo",
-                        "vehicles" => $vehicles,
+                        "vehicles" => $vehicles
                     );
                     
                     return response()->json($response);
