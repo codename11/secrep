@@ -60,3 +60,6 @@ Route::delete('delete_special_permissions','api\Special_PermissionsController@de
 //Custom report
 Route::get('getModels','api\CustomReportsController@getModels')->middleware('auth:api');
 Route::get('vehicles','api\CustomReportsController@vehicles')->middleware('auth:api');
+Route::get('deliveries','api\CustomReportsController@deliveries')->middleware('auth:api');
+Route::get('employees','api\CustomReportsController@employees')->middleware('auth:api');
+Route::get('users','api\CustomReportsController@users')->middleware('auth:api');
