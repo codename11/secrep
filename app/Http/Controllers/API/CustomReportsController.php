@@ -53,6 +53,11 @@ class CustomReportsController extends Controller
      */
     public function getModels(){
 
+        //Only admins should be able to access these reports.
+        if(auth()->user()->role->name != "admin"){
+            abort(403);
+        }
+
         $response = array(
             "ModelsWithRelationships" => [
                 "Complement" => [
@@ -115,7 +120,10 @@ class CustomReportsController extends Controller
 
     public function vehicles(Request $request)
     {
-        
+        if(auth()->user()->role->name != "admin"){
+            abort(403);
+        }
+
         $validation = Validator::make(
             $request->all(),
             [
@@ -219,6 +227,10 @@ class CustomReportsController extends Controller
      */
     public function deliveries(Request $request)
     {
+
+        if(auth()->user()->role->name != "admin"){
+            abort(403);
+        }
 
         $validation = Validator::make(
             $request->all(),
@@ -325,6 +337,10 @@ class CustomReportsController extends Controller
     public function employees(Request $request)
     {
 
+        if(auth()->user()->role->name != "admin"){
+            abort(403);
+        }
+
         $validation = Validator::make(
             $request->all(),
             [
@@ -429,6 +445,10 @@ class CustomReportsController extends Controller
 
     public function users(Request $request)
     {
+
+        if(auth()->user()->role->name != "admin"){
+            abort(403);
+        }
 
         $validation = Validator::make(
             $request->all(),
