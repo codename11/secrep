@@ -19,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\WorkOrganization' => 'App\Policies\WorkOrganizationPolicy',
         'App\Delivery' => 'App\Policies\DeliveryPolicy',
         'App\Special_Permission' => 'App\Policies\Special_PermissionPolicy',
+        'App\VehiclePivot' => 'App\Policies\VehiclePivotPolicy'
     ];
 
     /**

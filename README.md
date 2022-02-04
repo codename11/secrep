@@ -209,7 +209,7 @@ Example:
         "id": 1
     }
  ```
- 
+
  - Update special permission: `update_special_permissions`, method is `PATCH` with two fields and `id` for identifying which one.
 
  Example:
@@ -227,6 +227,119 @@ Example:
  ```
     {
         "id": 1
+    }
+ ```
+
+#### Custom reports endpoints:
+
+ - Get models: `getModels`, method is `GET` without parameters. Shows all available models. 
+
+ - Get vehicles: `vehicles`, methos is `GET` with several parameters for query filtering. `start_date` from which date you should start your query( it checks updated_at), `end_date` which is another border date. `vehicle_id` which is optional, if ommited, it will lookup for all vehicles. `vehicle` is array type parameter. It can contain `user`, `type` and `workOrganization` which serves to add additional(optional) info on vehicle.
+
+ Example:
+ ```
+    {
+        "start_date": "17/07/2021",
+        "end_date": "30/07/2021",
+        "vehicle_id": 1,
+        "vehicle": [
+            "user",
+            "type",
+            "workOrganization"
+        ]
+    }
+ ```
+
+ - Get deliveries: `deliveries`, method is `GET` with several parameters, `start_date` from which date you should start your query( it checks updated_at), `end_date` which is another border date. `delivery` which is array type parameter. It can contain `operator` i.e. employee, `enteredBy` which is what security officer entered it in system and `complement` which is basically when truck + cistern go together.
+
+ Example:
+ ```
+    {
+        "start_date": "17/07/2021",
+        "end_date": "30/01/2022",
+        "delivery": [
+            "operator",
+            "enteredBy",
+            "complement"
+        ]
+    }
+ ```
+
+- Get employees: `employees`, method is `GET` with several parameters. Almost as same as previous, but it's array parameter is `employee` with it's additional info, `work_organization`, `enteredBy` and `deliveries`.
+
+ Example:
+ ```
+     {
+         "start_date": "17/07/2021",
+         "end_date": "30/01/2022",
+         "employee": [
+             "work_organization",
+             "enteredBy",
+             "deliveries"
+         ]
+     }
+ ```
+
+ - Get users i.e. security officers: `users`, method is `GET`. It also have several parameters and it only differs in it's array one.
+ `user` which can contain `role`, `vehicles`, `deliveries`, `complement`, `delivery_details`, `special_permissions` and `employees`.
+
+ Example:
+ ```
+    {
+    "start_date": "17/07/2021",
+    "end_date": "30/01/2022",
+    "user": [
+        "role",
+        "vehicles",
+        "deliveries",
+        "complement",
+        "delivery_details",
+        "special_permissions",
+        "employees"
+    ]
+ }
+```
+
+#### Not mention tables
+
+Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_details` which connects which security officer entered which delivery info.
+
+ - Get all vehicle types: `list_vehicle_pivot`, method is `GET` without parameters.
+
+ - Create vehicle type: `create_vehicle_pivot`, method is `POST` with single parameter, `name`.
+
+ Example:
+ ```
+    {
+        "name": test1
+    }
+ ```
+
+ - Show vehicle type: `show_vehicle_pivot`, method is `GET` with single `id` parameter.
+
+ Example:
+ ```
+    {
+        "id": 3
+    }
+ ```
+
+ - Update vehicle type: `update_vehicle_pivot`, method is `PATCH` with two parameters, `id` and `name`. First one is required.
+
+ Example:
+ ```
+    {
+        "id": 3,
+        "name": "test123"
+    }
+ ```
+ 
+ - Delete vehicle type: `delete_vehicle_pivot`, method is `DELETE` with `id` as parameter.
+
+  Example:
+ ```
+    {
+        "id": 3
     }
  ```
   All of endpoints have this header:

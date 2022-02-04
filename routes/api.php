@@ -63,3 +63,10 @@ Route::get('vehicles','api\CustomReportsController@vehicles')->middleware('auth:
 Route::get('deliveries','api\CustomReportsController@deliveries')->middleware('auth:api');
 Route::get('employees','api\CustomReportsController@employees')->middleware('auth:api');
 Route::get('users','api\CustomReportsController@users')->middleware('auth:api');
+
+//Vehicle pivot: sets vehicle types
+Route::get('list_vehicle_pivot','api\VehiclePivotController@index')->middleware('auth:api');
+Route::post('create_vehicle_pivot','api\VehiclePivotController@store')->middleware('auth:api');
+Route::patch('update_vehicle_pivot','api\VehiclePivotController@update')->middleware('auth:api');
+Route::get('show_vehicle_pivot','api\VehiclePivotController@show')->middleware('auth:api');
+Route::delete('delete_vehicle_pivot','api\VehiclePivotController@destroy')->middleware('auth:api');
