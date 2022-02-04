@@ -186,6 +186,49 @@ Example:
         "id": 1
     }
  ```
+
+#### Special permissions endpoints:
+
+ - Create special permission: `create_special_permissions`, method is `POST` with two fields, `permission_name` and `permission_description` which both serve as additional explanation to specific deliveries.
+
+ Example:
+ ```
+    {
+        "permission_name": "permission2",
+        "permission_description": "druga permisija"
+    }
+ ```
+
+ - List special permissions: `list_special_permissions`, method is `GET` without parameters.
+
+ - Show special permissions: `show_special_permissions`, method is `GET` with `id` for identifying specific one.
+
+ Example: 
+ ```
+    {
+        "id": 1
+    }
+ ```
+ 
+ - Update special permission: `update_special_permissions`, method is `PATCH` with two fields and `id` for identifying which one.
+
+ Example:
+ ```
+    {
+        "id": 1,
+        "permission_name": "permission1",
+        "permission_description": "xxx"
+    }
+ ```
+
+ - Delete special permission: `delete_special_permissions`, method is `DELETE` with an `id` of one.
+
+ Example:
+ ```
+    {
+        "id": 1
+    }
+ ```
   All of endpoints have this header:
 
  ```
