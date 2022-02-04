@@ -62,7 +62,61 @@ Example:
     }
 ```
 
+#### Work organization endpoints:
 
+ - Create work organization: `create_work_organizations`, method is `POST` with single parameter `name` which is what it says, name of organizaton.
+
+Example:
+```
+    {
+        "name": "Alpha Trucking Co."
+    }
+```
+
+ - List work organizations: `list_work_organizations`, method is `GET` without parameters.
+
+ - Show work organization: `show_work_organization`, method is `GET` with single parameter of `id` for getting specific organization.
+
+ Example:
+ ```
+    {
+        "id": 1
+    }
+```
+
+ - Update work organization: `update_work_organization`, method is `PATCH` with two semi optional parameters and one required(id).
+
+ Example:
+ ```
+ {
+    "id": 1,
+    "name": "Alpha",
+    "sec_id": 1
+}
+```
+
+ - Delete work organization: `delete_work_organization`, method is `DELETE` with required parameter of `id`. It's same as any other delition.
+
+#### Employees endpoints:
+
+ - Create employee: `create_employee`, method is `POST`. This is little bit different. It also got an avatar which is basically an image which is uploaded for particular employee. Apart from that it also have an, `lastName`, `firstName`, `work_org_id`, `sec_id` fields. Last mentioned is `id` of security official who entered his info.
+
+ - List employees: `list_employees`, method is `GET` without parameters.
+
+ - Show employee: `show_employee`, method is `GET` with single parameter of `id`. It lists single employee.
+
+ Example:
+ ```
+    {
+        "id": 1
+    }
+```
+
+ - Update employee: `update_employee`, method is `PATCH` with same set of parameters like creating, but with added `id` for existing employee.
+
+ - Delete employee: `delete_employee`, method is `DELETE` with single parameter of `id`. Same as previous.
+
+#### Delivery endpoints:
 
   All of endpoints have this header:
 

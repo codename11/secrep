@@ -18,51 +18,31 @@ class WorkOrganizationController extends Controller
     public function index(Request $request)
     {
         
-        $validation = Validator::make(
-            $request->all(),
-            [
-                'type' => 'max:255',
-            ]
-        );
-        $errors = $validation->errors();
         if($request->ajax()){
 
-            if($validation->fails()){
+            if($request->isMethod("get")){
+                            
+                $workOrganizations = WorkOrganization::with("vehicles.type")->get();
 
+                $this->authorize('view', $workOrganizations->first());
+                
                 $response = array(
-                    "message" => "Failed",
-                    "errors" => $errors,
-    
+                    "message" => "bravo",
+                    "workOrganizations" => $workOrganizations,
                 );
+                
                 return response()->json($response);
 
             }
             else{
 
-                if($request->isMethod("get")){
-                              
-                    $workOrganizations = WorkOrganization::with("vehicles.type")->get();
-
-                    $this->authorize('view', $workOrganizations->first());
-                    
-                    $response = array(
-                        "message" => "bravo",
-                        "workOrganizations" => $workOrganizations,
-                    );
-                    
-                    return response()->json($response);
-    
-                }
-                else{
-    
-                    $response = array(
-                        "message" => "Method isn't GET.",
-                    );
-                    
-                    return response()->json($response);
-                }
-
-            }
+                $response = array(
+                    "message" => "Method isn't GET.",
+                );
+                
+                return response()->json($response);
+                
+            } 
 
         }
         else{
