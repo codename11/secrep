@@ -118,6 +118,74 @@ Example:
 
 #### Delivery endpoints:
 
+ - Create delivery: `create_delivery`, method is `POST` with numerous parameters. 
+
+ Example:
+ ```
+    {
+        "load_place": "Smederevo1",
+        "unload_place": "Aranđelovac1",
+        "comment": "isporuka",
+        "time_in": "06:24",
+        "time_out": "07:22",
+        "vehicles": {
+            "truck_id": 1,
+            "cistern_id": 2
+        },
+        "delivery_notes": {
+            "num1": 67854654,
+            "num2": 24566784
+        },
+        "operator_id": 1,
+        "sec_id": 1
+    }
+ ```
+"time_out" and "time_in" parameters are when vehicle passed the gate, make their delivery and and came back.
+"delivery_notes" are notes for specific delivery. Can be anything.
+
+ - List deliveries: `list_deliveries`, method is `GET` without parameters. List all deliveries.
+
+ - Show delivery: `show_delivery`, method is `GET` with single parameter of `id` for getting specific delivery.
+
+ Example:
+ ```
+     {
+        "id": 2
+     }
+ ```
+
+ - Update delivery: `update_delivery`, method is `PATCH` with parameters exactly as creating, but also with addionional one, an `id` which serves to identify which delivery record needs to be updated.
+
+ Example:
+ ```
+ {
+    "id": 1,
+    "load_place": "Smederevo2",
+    "unload_place": "Aranđelovac1",
+    "comment": "isporuka",
+    "time_in": "06:24",
+    "time_out": "07:22",
+    "vehicles": {
+        "truck_id": 1,
+        "cistern_id": 2
+    },
+    "delivery_notes": {
+        "num1": 67854654,
+        "num2": 24566784
+    },
+    "operator_id": 1,
+    "sec_id": 1
+ }
+ ```
+
+ - Delete delivery: `delete_delivery`, method is `DELETE` with `id` to identify which one to delete.
+
+ Example:
+ ```
+    {
+        "id": 1
+    }
+ ```
   All of endpoints have this header:
 
  ```
