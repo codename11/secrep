@@ -40,7 +40,7 @@ class VehiclesController extends Controller
             }
             else{
 
-                if($request->isMethod("get")){
+                if($request->isMethod("post")){
                     
                     $vehicles = Vehicle::when(!empty($request->workOrg),function ($query) use($request){
                         $query->whereHas("workOrganization", function($query) use($request){
@@ -57,7 +57,8 @@ class VehiclesController extends Controller
                     
                     $response = array(
                         "message" => "bravo",
-                        "vehicles" => $vehicles
+                        "vehicles" => $vehicles,
+                        "requestAll" => $request->all()
                     );
                     
                     return response()->json($response);
@@ -66,7 +67,7 @@ class VehiclesController extends Controller
                 else{
     
                     $response = array(
-                        "message" => "Method isn't GET.",
+                        "message" => "Method isn't POST.",
                     );
                     
                     return response()->json($response);

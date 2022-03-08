@@ -23,7 +23,7 @@ Route::post('/register', 'Api\AuthController@register');
 Route::post('/login', 'Api\AuthController@login');
 
 //Vehicles
-Route::get('list_vehicles','api\VehiclesController@index')->middleware('auth:api');
+Route::post('list_vehicles','api\VehiclesController@index')->middleware('auth:api');
 Route::post('create_vehicle','api\VehiclesController@store')->middleware('auth:api');
 Route::get('show_vehicle','api\VehiclesController@show')->middleware('auth:api');
 Route::patch('update_vehicle','api\VehiclesController@update')->middleware('auth:api');
