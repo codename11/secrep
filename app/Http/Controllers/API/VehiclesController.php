@@ -368,6 +368,7 @@ class VehiclesController extends Controller
                     $response = array(
                         "message" => "bravo",
                         "vehicle" => $vehicle,
+                        "vehicles" => Vehicle::all(),
                     );
                     
                     return response()->json($response);
