@@ -266,8 +266,9 @@ class VehiclesController extends Controller
             $request->all(),
             [
                 "id" => "required|numeric",
-                'registration' => 'max:255',
-                "vehicle_type_id" => "numeric"
+                'registration' => 'required|max:255',
+                "vehicle_type_id" => "nullable|numeric",
+                'workOrg' => 'nullable|max:255'
             ]
         );
         $errors = $validation->errors();
@@ -287,8 +288,8 @@ class VehiclesController extends Controller
             else{
 
                 if($request->isMethod("patch")){
-
-                    $vehicle = Vehicle::with("type")->find($request->id);
+                    
+                    $vehicle = Vehicle::with("workOrganization", "type")->find($request->id);
                     $vehicle->registration = $request->registration ? $request->registration : $vehicle->registration; 
                     $vehicle->vehicle_type_id = $request->vehicle_type_id ? $request->vehicle_type_id : $vehicle->vehicle_type_id;   
                     $vehicle->workOrganization_id = $request->workOrg ? $request->workOrg : $vehicle->workOrganization_id;
@@ -298,6 +299,7 @@ class VehiclesController extends Controller
                     $response = array(
                         "message" => "bravo",
                         "vehicle" => $vehicle,
+                        "vehicles" => Vehicle::with("workOrganization","type")->get()
                     );
                     
                     return response()->json($response);
