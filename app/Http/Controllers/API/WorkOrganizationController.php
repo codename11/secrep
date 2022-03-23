@@ -311,6 +311,7 @@ class WorkOrganizationController extends Controller
                     $response = array(
                         "message" => "bravo",
                         "workOrganization" => $workOrganization,
+                        "workOrganizations" => WorkOrganization::with("vehicles.type")->get()
                     );
                     
                     return response()->json($response);
