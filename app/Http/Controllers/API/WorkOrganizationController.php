@@ -239,8 +239,7 @@ class WorkOrganizationController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "workOrganization" => $workOrganization,
-                        "workOrganizations" => WorkOrganization::with("vehicles.type")->get()
+                        "workOrganization" => $workOrganization
                     );
                     
                     return response()->json($response);
@@ -310,8 +309,7 @@ class WorkOrganizationController extends Controller
 
                     $response = array(
                         "message" => "bravo",
-                        "workOrganization" => $workOrganization,
-                        "workOrganizations" => WorkOrganization::with("vehicles.type")->get()
+                        "workOrganization" => $workOrganization
                     );
                     
                     return response()->json($response);
