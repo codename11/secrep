@@ -128,7 +128,7 @@ class EmployeesController extends Controller
         
                         $response = array(
                             "message" => "bravo",
-                            "employee" => $employee->get(),
+                            "employee" => Employee::with("work_organization", "enteredBy")->find($employee->id),
                             "imagePath" => asset("storage/".$request->lastName."_".$request->firstName."/".$fileNameToStore)
                         );
                         
