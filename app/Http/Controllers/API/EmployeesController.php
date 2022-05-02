@@ -249,7 +249,7 @@ class EmployeesController extends Controller
                 'firstName' => 'max:255',
                 'work_org_id' => 'numeric',
                 'sec_id' => 'numeric',
-                'avatar' => 'image|mimes:jpeg'
+                'avatar' => 'nullable|image|mimes:jpeg'
             ]
         );
         $errors = $validation->errors();
