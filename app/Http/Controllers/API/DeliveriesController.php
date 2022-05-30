@@ -82,12 +82,12 @@ class DeliveriesController extends Controller
                 'load_place' => 'required|max:255',
                 "unload_place" => 'required|max:255',
                 "comment" => 'required|max:255',
-                'time_in' => 'required|date_format:H:i',
-                'time_out' => 'required|date_format:H:i',
+                'time_in' => 'required',
+                'time_out' => 'required',
                 "vehicles" => 'required|array',
                 "vehicles.*" => "required|integer",
-                'operator_id' => 'required|numeric',
-                'sec_id' => 'required|numeric'
+                'operator_id' => 'required|integer',
+                'sec_id' => 'required|integer'
             ]
         );
         $errors = $validation->errors();
@@ -99,7 +99,7 @@ class DeliveriesController extends Controller
                 $response = array(
                     "message" => "Failed",
                     "errors" => $errors,
-    
+                    "test" => $request->vehicles[0]
                 );
                 return response()->json($response);
 
@@ -122,9 +122,9 @@ class DeliveriesController extends Controller
                     $delivery->save();
 
                     $ifToManyTrucks = 0;
-                    foreach($request->vehicles as $key => $value){
+                    for($i=0;$i<count($request->vehicles);$i++){
 
-                        $tmp1 = Vehicle::with("type")->find($value)->type->id;
+                        $tmp1 = Vehicle::with("type")->find($request->vehicles[$i])->type->id;
                         if($tmp1 == 1){
 
                             $ifToManyTrucks++;
@@ -135,22 +135,22 @@ class DeliveriesController extends Controller
                     
                     if($ifToManyTrucks == 1){
 
-                        foreach($request->vehicles as $key => $value){
+                        for($i=0;$i<count($request->vehicles);$i++){
 
                             $complement = new Complement;
                             $complement->delivery_id = $delivery->id;
-                            $complement->vehicle_id = $value;
+                            $complement->vehicle_id = $request->vehicles[$i];
                             $complement->sec_id = auth()->user()->id;
                             $complement->save();
     
                         }
     
-                        foreach($request->delivery_notes as $key => $value){
+                        for($i=0;$i<count($request->vehicles);$i++){
     
                             $delivery_details = new Delivery_details;
                             $delivery_details->delivery_id = $delivery->id;
-                            $delivery_details->delivery_note = $value;
-                            $delivery->sec_id = auth()->user()->id;
+                            $delivery_details->delivery_note = $request->vehicles[$i];
+                            $delivery_details->sec_id = $request->sec_id;
                             $delivery_details->save();
     
                         }
