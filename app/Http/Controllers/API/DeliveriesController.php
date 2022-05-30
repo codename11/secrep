@@ -156,7 +156,6 @@ class DeliveriesController extends Controller
                         }
         
                         $response = array(
-                            "message" => "bravo",
                             "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
                         );
                         
