@@ -149,7 +149,7 @@ class DeliveriesController extends Controller
     
                             $delivery_details = new Delivery_details;
                             $delivery_details->delivery_id = $delivery->id;
-                            $delivery_details->delivery_note = $request->vehicles[$i];
+                            $delivery_details->delivery_note = $request->delivery_note[$i];
                             $delivery_details->sec_id = $request->sec_id;
                             $delivery_details->save();
     
