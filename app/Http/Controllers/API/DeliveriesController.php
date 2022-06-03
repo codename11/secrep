@@ -98,8 +98,7 @@ class DeliveriesController extends Controller
 
                 $response = array(
                     "message" => "Failed",
-                    "errors" => $errors,
-                    "test" => $request->vehicles[0]
+                    "errors" => $errors
                 );
                 return response()->json($response);
 
@@ -145,7 +144,7 @@ class DeliveriesController extends Controller
     
                         }
     
-                        for($i=0;$i<count($request->vehicles);$i++){
+                        for($i=0;$i<count($request->delivery_note);$i++){
     
                             $delivery_details = new Delivery_details;
                             $delivery_details->delivery_id = $delivery->id;
