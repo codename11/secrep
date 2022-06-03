@@ -155,7 +155,7 @@ class DeliveriesController extends Controller
                         }
         
                         $response = array(
-                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
+                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($delivery->id),
                         );
                         
                         return response()->json($response);
