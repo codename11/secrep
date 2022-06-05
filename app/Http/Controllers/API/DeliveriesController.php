@@ -24,7 +24,7 @@ class DeliveriesController extends Controller
 
             if($request->isMethod("get")){
                             
-                $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get();
+                $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->get();
                 $this->authorize('view', $deliveries->first());
                 
                 $response = array(
@@ -155,7 +155,7 @@ class DeliveriesController extends Controller
                         }
         
                         $response = array(
-                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($delivery->id),
+                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->find($delivery->id),
                         );
                         
                         return response()->json($response);
