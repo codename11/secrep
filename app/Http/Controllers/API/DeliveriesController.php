@@ -82,8 +82,8 @@ class DeliveriesController extends Controller
                 'load_place' => 'required|max:255',
                 "unload_place" => 'required|max:255',
                 "comment" => 'required|max:255',
-                'time_in' => 'required',
-                'time_out' => 'required',
+                'time_in' => 'required|date_format:d/m/Y H:i',
+                'time_out' => 'required|date_format:d/m/Y H:i',
                 "vehicles" => 'required|array',
                 "vehicles.*" => "required|integer",
                 'operator_id' => 'required|integer',
@@ -271,14 +271,17 @@ class DeliveriesController extends Controller
                 'load_place' => 'max:255',
                 "unload_place" => 'max:255',
                 "comment" => 'max:255',
-                'time_in' => 'date_format:H:i',
-                'time_out' => 'date_format:H:i',
+                'time_in' => 'required|date_format:d/m/Y H:i',
+                'time_out' => 'required|date_format:d/m/Y H:i',
                 "vehicles" => 'array',
                 "vehicles.*" => "integer",
+                "delivery_notes" => 'array',
+                "delivery_notes.*" => "integer",
                 'operator_id' => 'numeric',
                 'sec_id' => 'numeric'
             ]
         );
+        
         $errors = $validation->errors();
 
         if($request->ajax()){
@@ -287,7 +290,7 @@ class DeliveriesController extends Controller
 
                 $response = array(
                     "message" => "Failed",
-                    "errors" => $errors,
+                    "errors" => $errors
     
                 );
                 return response()->json($response);
@@ -305,76 +308,81 @@ class DeliveriesController extends Controller
                     $delivery->time_out = $request->time_out ? $request->time_out : $delivery->time_out;
 
                     $delivery->operator_id = $request->operator_id ? $request->operator_id : $delivery->operator_id;
-                    $delivery->sec_id = auth()->user()->id; 
+                    $delivery->sec_id = $request->sec_id; 
                     $this->authorize('update', $delivery);
 
                     $delivery->save();
 
                     $ifToManyTrucks = 0;
-                    foreach($request->vehicles as $key => $value){
 
-                        $tmp1 = Vehicle::with("type")->find($value)->type->id;
-                        if($tmp1 == 1){
+                    if(is_iterable($request->vehicles)){
+                        for($i=0;$i<count($request->vehicles);$i++){
 
-                            $ifToManyTrucks++;
+                            $tmp1 = Vehicle::with("type")->find($request->vehicles[$i])->type->id;
+                            if($tmp1 == 1){
+
+                                $ifToManyTrucks++;
+
+                            }
 
                         }
-
                     }
                     
                     if($ifToManyTrucks == 1){
 
-                        foreach($request->vehicles as $key => $value){
+                        if(is_iterable($request->vehicles)){
+                            for($i=0;$i<count($request->vehicles);$i++){
 
-                            $complement = Complement::where("vehicle_id", "=", $value)->where("delivery_id", "=", $delivery->id)->first();
-                            
-                            if($complement){
-
-                                $complement->delivery_id = $delivery->id ? $delivery->id : $complement->delivery_id;
-                                $complement->vehicle_id = $value ? $value : $complement->vehicle_id;
-                                $complement->sec_id = auth()->user()->id;
-                                $complement->save();
-
-                            }
-                            else{
-
-                                $response = array(
-                                    "message" => "There no such complement.",
-                                );
+                                $complement = Complement::where("vehicle_id", "=", $request->vehicles[$i])->where("delivery_id", "=", $delivery->id)->first();
                                 
-                                return response()->json($response);
+                                if($complement){
 
-                            }
-    
-                        }
-    
-                        foreach($request->delivery_notes as $key => $value){
-    
-                            $delivery_details = Delivery_details::where("delivery_id", "=", $delivery->id)->first();
+                                    $complement->delivery_id = $delivery->id ? $delivery->id : $complement->delivery_id;
+                                    $complement->vehicle_id = $request->vehicles[$i] ? $request->vehicles[$i] : $complement->vehicle_id;
+                                    $complement->sec_id = $request->sec_id;
+                                    $complement->save();
 
-                            if($delivery_details){
+                                }
+                                else{
 
-                                $delivery_details->delivery_id = $delivery->id ? $delivery->id : $delivery_details->delivery_id;
-                                $delivery_details->delivery_note = $value ? $value : $delivery_details->delivery_note;
-                                $delivery->sec_id = auth()->user()->id;
-                                $delivery_details->save();
+                                    $response = array(
+                                        "message" => "There no such complement.",
+                                    );
+                                    
+                                    return response()->json($response);
 
-                            }
-                            else{
-
-                                $response = array(
-                                    "message" => "There no such delivery_details.",
-                                );
-                                
-                                return response()->json($response);
-
-                            }
-    
-                        }
+                                }
         
+                            }
+                        }
+
+                        if(is_iterable($request->delivery_notes)){
+                            for($i=0;$i<count($request->delivery_notes);$i++){
+        
+                                $delivery_details = Delivery_details::where("delivery_id", "=", $delivery->id)->first();
+
+                                if($delivery_details){
+
+                                    $delivery_details->delivery_id = $delivery->id ? $delivery->id : $delivery_details->delivery_id;
+                                    $delivery_details->delivery_note = $request->delivery_notes[$i] ? $request->delivery_notes[$i] : $delivery_details->delivery_note;
+                                    $delivery->sec_id = $request->sec_id;
+                                    $delivery_details->save();
+
+                                }
+                                else{
+
+                                    $response = array(
+                                        "message" => "There no such delivery_details.",
+                                    );
+                                    
+                                    return response()->json($response);
+
+                                }
+        
+                            }
+                        }
                         $response = array(
-                            "message" => "bravo",
-                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->get(),
+                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->find($delivery->id)
                         );
                         
                         return response()->json($response);
