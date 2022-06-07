@@ -21,7 +21,7 @@ class Special_PermissionsController extends Controller
 
             if($request->isMethod("get")){
                             
-                $specialPermission = Special_Permission::with("user", "vehicles.type", "vehicles.workOrganization")->get();
+                $specialPermission = Special_Permission::with("user", "vehicles.type", "vehicles.workOrganization", "employees.work_organization")->get();
 
                 $this->authorize('view', $specialPermission->first());
                 
