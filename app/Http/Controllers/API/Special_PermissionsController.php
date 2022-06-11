@@ -79,6 +79,7 @@ class Special_PermissionsController extends Controller
             [
                 'permission_name' => 'required|max:255',
                 "permission_description" => 'required|max:255',
+                "sec_id" => "required|integer"
             ]
         );
         $errors = $validation->errors();
@@ -102,13 +103,13 @@ class Special_PermissionsController extends Controller
                     $specialPermission = new Special_Permission;
                     $specialPermission->permission_name = $request->permission_name;
                     $specialPermission->permission_description = $request->permission_description;
+                    $specialPermission->sec_id = $request->sec_id;
 
                     $this->authorize('create', $specialPermission);
                     $specialPermission->save();
 
                     $response = array(
-                        "message" => "bravo",
-                        "specialPermission" => $specialPermission->with("user", "vehicles")->get(),
+                        "specialPermission" => $specialPermission->with("user", "vehicles")->find($specialPermission->id),
                     );
                     
                     return response()->json($response);
