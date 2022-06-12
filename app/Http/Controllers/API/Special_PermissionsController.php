@@ -234,6 +234,7 @@ class Special_PermissionsController extends Controller
                 "id" => "required|numeric",
                 'permission_name' => 'max:255',
                 "permission_description" => 'max:255',
+                "sec_id" => "required|numeric",
             ]
         );
         $errors = $validation->errors();
@@ -257,11 +258,11 @@ class Special_PermissionsController extends Controller
                     $specialPermission = Special_Permission::with("user", "vehicles")->find($request->id);
                     $specialPermission->permission_name = $request->permission_name ? $request->permission_name : $specialPermission->permission_name; 
                     $specialPermission->permission_description = $request->permission_description ? $request->permission_description : $specialPermission->permission_description;   
+                    $specialPermission->sec_id = $request->sec_id ? $request->sec_id : $specialPermission->sec_id;   
                     $this->authorize('update', $specialPermission);
                     $specialPermission->save();
     
                     $response = array(
-                        "message" => "bravo",
                         "specialPermission" => $specialPermission,
                     );
                     
@@ -305,7 +306,7 @@ class Special_PermissionsController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                "id" => "required|numeric",
+                "id" => "required|integer",
             ]
         );
         $errors = $validation->errors();
@@ -331,7 +332,6 @@ class Special_PermissionsController extends Controller
                     $specialPermission->delete();
 
                     $response = array(
-                        "message" => "bravo",
                         "specialPermission" => $specialPermission,
                     );
                     
