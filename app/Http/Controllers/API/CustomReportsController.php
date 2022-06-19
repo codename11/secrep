@@ -127,8 +127,8 @@ class CustomReportsController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                'start_date' => 'date_format:d/m/Y',
-                "end_date" => 'date_format:d/m/Y',
+                'start_date' => 'date_format:d/m/Y H:i',
+                "end_date" => 'date_format:d/m/Y H:i',
                 "vehicle_id" => "numeric|gt:0",
                 "vehicle" => "array"
             ]
@@ -149,7 +149,7 @@ class CustomReportsController extends Controller
             }
             else{
 
-                if($request->isMethod("get")){
+                if($request->isMethod("post")){
 
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
@@ -187,7 +187,6 @@ class CustomReportsController extends Controller
                     }
                         
                     $response = array(
-                        "message" => "bravo",
                         "vehicles" => $vehicles
                     );
                     
@@ -197,7 +196,7 @@ class CustomReportsController extends Controller
                 else{
 
                     $response = array(
-                        "message" => "Method isn't GET.",
+                        "message" => "Method isn't POST.",
                     );
                     
                     return response()->json($response);
@@ -235,8 +234,8 @@ class CustomReportsController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                'start_date' => 'date_format:d/m/Y',
-                "end_date" => 'date_format:d/m/Y',
+                'start_date' => 'date_format:d/m/Y H:i',
+                "end_date" => 'date_format:d/m/Y H:i',
                 "delivery_id" => "numeric|gt:0",
                 "delivery" => "array"
             ]
@@ -257,7 +256,7 @@ class CustomReportsController extends Controller
             }
             else{
 
-                if($request->isMethod("get")){
+                if($request->isMethod("post")){
 
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
@@ -281,7 +280,6 @@ class CustomReportsController extends Controller
                         })->find($request->delivery_id);
 
                         $response = array(
-                            "message" => "Bravo",
                             "deliveries" => $deliveries
                 
                         );
@@ -300,7 +298,6 @@ class CustomReportsController extends Controller
                         })->get();
 
                         $response = array(
-                            "message" => "Bravo",
                             "deliveries" => $deliveries
                 
                         );
@@ -312,7 +309,7 @@ class CustomReportsController extends Controller
                 else{
     
                     $response = array(
-                        "message" => "Method isn't GET.",
+                        "message" => "Method isn't POST.",
                     );
                     
                     return response()->json($response);
@@ -344,8 +341,8 @@ class CustomReportsController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                'start_date' => 'date_format:d/m/Y',
-                "end_date" => 'date_format:d/m/Y',
+                'start_date' => 'date_format:d/m/Y H:i',
+                "end_date" => 'date_format:d/m/Y H:i',
                 "employee_id" => "numeric|gt:0",
                 "employee" => "array"
             ]
@@ -366,7 +363,7 @@ class CustomReportsController extends Controller
             }
             else{
 
-                if($request->isMethod("get")){
+                if($request->isMethod("post")){
 
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
@@ -390,7 +387,6 @@ class CustomReportsController extends Controller
                         })->find($request->employee_id);
 
                         $response = array(
-                            "message" => "Bravo",
                             "employees" => $employees
                 
                         );
@@ -409,7 +405,6 @@ class CustomReportsController extends Controller
                         })->get();
 
                         $response = array(
-                            "message" => "Bravo",
                             "employees" => $employees
                 
                         );
@@ -421,7 +416,7 @@ class CustomReportsController extends Controller
                 else{
     
                     $response = array(
-                        "message" => "Method isn't GET.",
+                        "message" => "Method isn't POST.",
                     );
                     
                     return response()->json($response);
@@ -453,8 +448,8 @@ class CustomReportsController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
-                'start_date' => 'date_format:d/m/Y',
-                "end_date" => 'date_format:d/m/Y',
+                'start_date' => 'date_format:d/m/Y H:i',
+                "end_date" => 'date_format:d/m/Y H:i',
                 "user_id" => "numeric|gt:0",
                 "user" => "array"
             ]
@@ -475,7 +470,7 @@ class CustomReportsController extends Controller
             }
             else{
 
-                if($request->isMethod("get")){
+                if($request->isMethod("post")){
 
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
@@ -490,7 +485,7 @@ class CustomReportsController extends Controller
                     if($request->user_id && User::find($request->user_id)){
 
                         //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $employees = Employee::with("complement.deliveries", ...$request->user)
+                        $users = User::with("complement.deliveries", ...$request->user)
                         ->when($dates->start_date, function ($query, $date) {
                             $query->where('updated_at', '>=', $date);
                         })
@@ -499,7 +494,6 @@ class CustomReportsController extends Controller
                         })->find($request->user_id);
 
                         $response = array(
-                            "message" => "Bravo",
                             "users" => $users
                 
                         );
@@ -518,7 +512,6 @@ class CustomReportsController extends Controller
                         })->get();
 
                         $response = array(
-                            "message" => "Bravo",
                             "users" => $users
                 
                         );
@@ -530,7 +523,7 @@ class CustomReportsController extends Controller
                 else{
     
                     $response = array(
-                        "message" => "Method isn't GET.",
+                        "message" => "Method isn't POST.",
                     );
                     
                     return response()->json($response);
