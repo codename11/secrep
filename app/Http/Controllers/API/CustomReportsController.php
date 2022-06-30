@@ -161,28 +161,90 @@ class CustomReportsController extends Controller
                     $dates->start_date = $start_date;
                     $dates->end_date = $end_date;
 
-                    /*$myModels = (new CustomReportsController())->getModels();*/
-
+                    $str1 = "";
+                    $arr1 = $request->vehicle ? $request->vehicle : [];
                     if($request->vehicle_id && Vehicle::find($request->vehicle_id)){
                         
-                        $vehicles = Vehicle::with("complements.deliveries.employees", ...$request->vehicle)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->find($request->vehicle_id);
+                        if(count($arr1)>0){
+
+                            if(in_array("complements", $arr1)){
+
+                                $str1 = "complements.deliveries.employees";
+                                unset($arr1["complements"]);
+    
+                                $vehicles = Vehicle::with($str1, ...$arr1)->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->vehicle_id);
+
+                            }
+                            else{
+
+                                $vehicles = Vehicle::with(...$arr1)->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->vehicle_id);
+
+                            }
+
+                        }
+                        
+                        if(count($arr1)===0){
+
+                            $vehicles = Vehicle::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->find($request->vehicle_id);
+
+                        }
 
                     }
                     else{
+                        
+                        if(count($arr1)>0){
 
-                        $vehicles = Vehicle::with("complements.deliveries.employees", ...$request->vehicle)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->get();
+                            if(in_array("complements", $arr1)){
+
+                                $str1 = "complements.deliveries.employees";
+                                unset($arr1["complements"]);
+    
+                                $vehicles = Vehicle::with($str1, ...$arr1)->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+
+                            }
+                            else{
+
+                                $vehicles = Vehicle::with(...$arr1)->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+
+                            }
+
+                        }
+                        
+                        if(count($arr1)===0){
+
+                            $vehicles = Vehicle::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->get();
+
+                        }
 
                     }
                         
@@ -268,42 +330,105 @@ class CustomReportsController extends Controller
                     $dates->start_date = $start_date;
                     $dates->end_date = $end_date;
 
+                    $str1 = "";
+                    $str2 = "";
+                    $arr1 = $request->delivery ? $request->delivery : [];
                     if($request->delivery_id && Delivery::find($request->delivery_id)){
+                        
+                        if(count($arr1)>0){
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $deliveries = Delivery::with("operator.work_organization", "operator.enteredBy", ...$request->delivery)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->find($request->delivery_id);
+                            if(in_array("operator", $arr1)){
 
-                        $response = array(
-                            "deliveries" => $deliveries
-                
-                        );
-                        return response()->json($response);
+                                $str1 = "operator.work_organization";
+                                $str2 = "operator.enteredBy";
+                                unset($arr1["operator"]);
+    
+                                $deliveries = Delivery::with($str1, $str2, ...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->delivery_id);
+    
+                            }
+                            else{
+
+                                $deliveries = Delivery::with(...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->delivery_id);
+
+                            }
+
+                        }
+
+                        if(count($arr1)===0){
+
+                            $deliveries = Delivery::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->find($request->delivery_id);
+
+                        }
 
                     }
                     else{
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $deliveries = Delivery::with("operator.work_organization", "operator.enteredBy", ...$request->delivery)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->get();
+                        if(count($arr1)>0){
 
-                        $response = array(
-                            "deliveries" => $deliveries
-                
-                        );
-                        return response()->json($response);
+                            if(in_array("operator", $arr1)){
+
+                                $str1 = "operator.work_organization";
+                                $str2 = "operator.enteredBy";
+                                unset($arr1["operator"]);
+    
+                                $deliveries = Delivery::with($str1, $str2, ...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+    
+                            }
+                            else{
+
+                                $deliveries = Delivery::with(...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+
+                            }
+
+                        }
+
+                        if(count($arr1)===0){
+
+                            $deliveries = Delivery::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->get();
+
+                        }
 
                     }
+
+                    $response = array(
+                        "deliveries" => $deliveries
+            
+                    );
+                    return response()->json($response);
     
                 }
                 else{
@@ -375,42 +500,65 @@ class CustomReportsController extends Controller
                     $dates->start_date = $start_date;
                     $dates->end_date = $end_date;
 
+                    $arr1 = $request->employee ? $request->employee : [];
                     if($request->employee_id && Employee::find($request->employee_id)){
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $employees = Employee::with(...$request->employee)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->find($request->employee_id);
+                        if(count($arr1)>0){
 
-                        $response = array(
-                            "employees" => $employees
-                
-                        );
-                        return response()->json($response);
+                            $employees = Employee::with(...$arr1)
+                            ->when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->find($request->employee_id);
+
+                        }
+                        
+                        if(count($arr1)===0){
+
+                            $employees = Employee::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->find($request->employee_id);
+
+                        }
 
                     }
                     else{
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $employees = Employee::with(...$request->employee)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->get();
+                        if(count($arr1)>0){
 
-                        $response = array(
-                            "employees" => $employees
-                
-                        );
-                        return response()->json($response);
+                            $employees = Employee::with(...$arr1)
+                            ->when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->get();
+
+                        }
+                        
+                        if(count($arr1)===0){
+
+                            $employees = Employee::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->get();
+
+                        }
 
                     }
+
+                    $response = array(
+                        "employees" => $employees
+            
+                    );
+                    return response()->json($response);
     
                 }
                 else{
@@ -482,42 +630,101 @@ class CustomReportsController extends Controller
                     $dates->start_date = $start_date;
                     $dates->end_date = $end_date;
 
+                    $str1 = "";
+                    $arr1 = $request->user ? $request->user : [];
                     if($request->user_id && User::find($request->user_id)){
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $users = User::with("complement.deliveries", ...$request->user)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->find($request->user_id);
+                        if(count($arr1)>0){
 
-                        $response = array(
-                            "users" => $users
-                
-                        );
-                        return response()->json($response);
+                            if(in_array("complement", $arr1)){
+
+                                $str1 = "complement.deliveries";
+                                unset($arr1["complement"]);
+
+                                $users = User::with($str1, ...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->user_id);
+
+                            }
+                            else{
+
+                                $users = User::with(...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->find($request->user_id);
+
+                            }
+
+                        }
+
+                        if(count($arr1)===0){
+
+                            $users = User::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->find($request->user_id);
+
+                        }
 
                     }
                     else{
 
-                        //Izgleda da se ovde ne dupliraju podaci iz relationship-a.
-                        $users = User::with("complement.deliveries", ...$request->user)
-                        ->when($dates->start_date, function ($query, $date) {
-                            $query->where('updated_at', '>=', $date);
-                        })
-                        ->when($dates->end_date, function ($query, $date) {
-                            $query->where('updated_at', '<=', $date);
-                        })->get();
+                        if(count($arr1)>0){
 
-                        $response = array(
-                            "users" => $users
-                
-                        );
-                        return response()->json($response);
+                            $str1 = "complement.deliveries";
+                            unset($arr1["complement"]);
+
+                            if(in_array("complement", $arr1)){
+
+                                $users = User::with($str1, ...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+
+                            }
+                            else{
+
+                                $users = User::with(...$arr1)
+                                ->when($dates->start_date, function ($query, $date) {
+                                    $query->where('updated_at', '>=', $date);
+                                })
+                                ->when($dates->end_date, function ($query, $date) {
+                                    $query->where('updated_at', '<=', $date);
+                                })->get();
+
+                            }
+
+                        }
+
+                        if(count($arr1)===0){
+
+                            $users = User::when($dates->start_date, function ($query, $date) {
+                                $query->where('updated_at', '>=', $date);
+                            })
+                            ->when($dates->end_date, function ($query, $date) {
+                                $query->where('updated_at', '<=', $date);
+                            })->get();
+
+                        }
 
                     }
+
+                    $response = array(
+                        "users" => $users
+                    );
+                    return response()->json($response);
     
                 }
                 else{
