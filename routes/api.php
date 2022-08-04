@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Authentication
 Route::post('/register', 'Api\AuthController@register');
 Route::post('/login', 'Api\AuthController@login');
+Route::post('/logout', 'Api\AuthController@logout')->middleware('auth:api');
 
 //Vehicles
 Route::post('list_vehicles','api\VehiclesController@index')->middleware('auth:api');

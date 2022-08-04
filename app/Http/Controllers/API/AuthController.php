@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -49,6 +50,12 @@ class AuthController extends Controller
         $user = User::with("role", "vehicles.type")->find(auth()->user()->id);
     
         return response(["Email is sent." , "user" => $user , "access_token" => $accessToken]);
+
+    }
+
+    public function logout(Request $request){
+
+        auth()->user()->token()->revoke();
 
     }
 
