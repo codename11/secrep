@@ -120,6 +120,7 @@ class CustomReportsController extends Controller
 
     public function vehicles(Request $request)
     {
+        
         if(auth()->user()->role->name != "admin"){
             abort(403);
         }
@@ -150,7 +151,7 @@ class CustomReportsController extends Controller
             else{
 
                 if($request->isMethod("post")){
-
+                    
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
 
@@ -163,6 +164,7 @@ class CustomReportsController extends Controller
 
                     $str1 = "";
                     $arr1 = $request->vehicle ? $request->vehicle : [];
+                    $individualOrAll = false;
                     if($request->vehicle_id && Vehicle::find($request->vehicle_id)){
                         
                         if(count($arr1)>0){
@@ -178,7 +180,7 @@ class CustomReportsController extends Controller
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
                                 })->find($request->vehicle_id)->paginate(5);
-
+                                
                             }
                             else{
 
@@ -188,7 +190,7 @@ class CustomReportsController extends Controller
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
                                 })->find($request->vehicle_id)->paginate(5);
-
+                                
                             }
 
                         }
@@ -247,7 +249,7 @@ class CustomReportsController extends Controller
                         }
 
                     }
-                        
+
                     $response = array(
                         "vehicles" => $vehicles
                     );
