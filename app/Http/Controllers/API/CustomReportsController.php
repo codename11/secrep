@@ -179,7 +179,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->find($request->vehicle_id)->paginate(5);
+                                })->find($request->vehicle_id)->paginate(4);
                                 
                             }
                             else{
@@ -189,7 +189,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->find($request->vehicle_id)->paginate(5);
+                                })->find($request->vehicle_id)->paginate(4);
                                 
                             }
 
@@ -202,7 +202,7 @@ class CustomReportsController extends Controller
                             })
                             ->when($dates->end_date, function ($query, $date) {
                                 $query->where('updated_at', '<=', $date);
-                            })->find($request->vehicle_id)->paginate(5);
+                            })->find($request->vehicle_id)->paginate(4);
 
                         }
 
@@ -221,7 +221,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->paginate(5);
+                                })->paginate(4);
 
                             }
                             else{
@@ -231,7 +231,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->paginate(5);
+                                })->paginate(4);
 
                             }
 
@@ -244,7 +244,7 @@ class CustomReportsController extends Controller
                             })
                             ->when($dates->end_date, function ($query, $date) {
                                 $query->where('updated_at', '<=', $date);
-                            })->paginate(5);
+                            })->paginate(4);
 
                         }
 
