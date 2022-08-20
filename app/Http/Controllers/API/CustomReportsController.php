@@ -130,8 +130,9 @@ class CustomReportsController extends Controller
             [
                 'start_date' => 'date_format:d/m/Y H:i',
                 "end_date" => 'date_format:d/m/Y H:i',
+                "per_page" => "numeric|gt:0",
                 "vehicle_id" => "numeric|gt:0",
-                "vehicle" => "array"
+                "vehicle" => "array",
             ]
         );
         $errors = $validation->errors();
@@ -152,6 +153,7 @@ class CustomReportsController extends Controller
 
                 if($request->isMethod("post")){
                     
+                    $per_page = $request->per_page ? $request->per_page : null;
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
 
@@ -220,7 +222,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->paginate(4);
+                                })->paginate($per_page);
 
                             }
                             else{
@@ -230,7 +232,7 @@ class CustomReportsController extends Controller
                                 })
                                 ->when($dates->end_date, function ($query, $date) {
                                     $query->where('updated_at', '<=', $date);
-                                })->paginate(4);
+                                })->paginate($per_page);
 
                             }
 
@@ -243,7 +245,7 @@ class CustomReportsController extends Controller
                             })
                             ->when($dates->end_date, function ($query, $date) {
                                 $query->where('updated_at', '<=', $date);
-                            })->paginate(4);
+                            })->paginate($per_page);
 
                         }
 

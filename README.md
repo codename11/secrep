@@ -300,7 +300,7 @@ Example:
  }
 ```
 
-#### Not mention tables
+#### Not mentioned tables
 
 Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_details` which connects which security officer entered which delivery info.
 
