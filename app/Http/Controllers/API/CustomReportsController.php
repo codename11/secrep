@@ -194,8 +194,7 @@ class CustomReportsController extends Controller
                             }
 
                         }
-                        
-                        if(count($arr1)===0){
+                        else if(count($arr1)===0){
 
                             $vehicles = Vehicle::when($dates->start_date, function ($query, $date) {
                                 $query->where('updated_at', '>=', $date);
