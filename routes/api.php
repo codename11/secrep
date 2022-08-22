@@ -71,3 +71,7 @@ Route::post('create_vehicle_pivot','api\VehiclePivotController@store')->middlewa
 Route::patch('update_vehicle_pivot','api\VehiclePivotController@update')->middleware('auth:api');
 Route::get('show_vehicle_pivot','api\VehiclePivotController@show')->middleware('auth:api');
 Route::delete('delete_vehicle_pivot','api\VehiclePivotController@destroy')->middleware('auth:api');
+
+//Per_page
+Route::post('create_per_page','api\UtilitiesController@store')->middleware('auth:api');
+Route::patch('update_per_page','api\UtilitiesController@update')->middleware('auth:api');

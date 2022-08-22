@@ -11,6 +11,7 @@ use App\User;
 use App\Rules\Vehicles;
 use App\Delivery;
 use App\Employee;
+use App\Utility;
 
 class CustomReportsController extends Controller
 {
@@ -130,7 +131,6 @@ class CustomReportsController extends Controller
             [
                 'start_date' => 'date_format:d/m/Y H:i',
                 "end_date" => 'date_format:d/m/Y H:i',
-                "per_page" => "numeric|gt:0",
                 "vehicle_id" => "numeric|gt:0",
                 "vehicle" => "array",
             ]
@@ -153,7 +153,6 @@ class CustomReportsController extends Controller
 
                 if($request->isMethod("post")){
                     
-                    $per_page = $request->per_page ? $request->per_page : null;
                     $d1 = $request->start_date ? new DateHelper($request->start_date) : null;
                     $d2 = $request->end_date ? new DateHelper($request->end_date) : null;
 
@@ -166,7 +165,9 @@ class CustomReportsController extends Controller
 
                     $str1 = "";
                     $arr1 = $request->vehicle ? $request->vehicle : [];
-                    $individualOrAll = false;
+
+                    $per_page = Utility::where("user_id", auth()->user()->id)->first()->per_page ? Utility::where("user_id", auth()->user()->id)->first()->per_page : 4;
+
                     if($request->vehicle_id && Vehicle::find($request->vehicle_id)){
                         
                         if(count($arr1)>0){
