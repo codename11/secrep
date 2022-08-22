@@ -67,5 +67,9 @@ class User extends Authenticatable
     public function employees(){
         return $this->hasMany("App\Employee", "sec_id", "id");
     }
+
+    public function utility(){
+        return $this->hasOne("App\Utility", "user_id", "id");
+    }
     
 }

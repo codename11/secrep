@@ -166,7 +166,7 @@ class CustomReportsController extends Controller
                     $str1 = "";
                     $arr1 = $request->vehicle ? $request->vehicle : [];
 
-                    $per_page = Utility::where("user_id", auth()->user()->id)->first()->per_page ? Utility::where("user_id", auth()->user()->id)->first()->per_page : 4;
+                    $per_page = Utility::where("user_id", auth()->user()->id)->first() && Utility::where("user_id", auth()->user()->id)->first()->per_page ? Utility::where("user_id", auth()->user()->id)->first()->per_page : 4;
 
                     if($request->vehicle_id && Vehicle::find($request->vehicle_id)){
                         
