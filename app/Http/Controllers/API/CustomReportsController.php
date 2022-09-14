@@ -253,7 +253,8 @@ class CustomReportsController extends Controller
                     }
 
                     $response = array(
-                        "vehicles" => $vehicles
+                        "vehicles" => $vehicles,
+                        "linkovi" => (string)Vehicle::paginate($per_page)->onEachSide(1)->links()
                     );
                     
                     return response()->json($response);
