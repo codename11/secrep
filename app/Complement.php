@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Complement extends Model
 {
+    use SoftDeletes;
+    
     protected $table = 'complement';
     protected $fillable = [
         'delivery_id', 

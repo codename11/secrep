@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Special_Permission extends Model
 {
+    use SoftDeletes;
+    
     protected $table = 'special_permissions';
     protected $fillable = [
         'permission_name', 

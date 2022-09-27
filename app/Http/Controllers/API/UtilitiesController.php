@@ -64,6 +64,7 @@ class UtilitiesController extends Controller
 
                     $user_id = auth()->user()->id;
                     $ifExists = Utility::where("user_id", $user_id)->first();
+                    $this->authorize('create', $ifExists);
                     if(!$ifExists){
                         $per_page = new Utility;
                         $per_page->per_page = $request->per_page;

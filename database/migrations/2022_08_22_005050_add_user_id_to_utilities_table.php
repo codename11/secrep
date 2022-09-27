@@ -27,7 +27,8 @@ class AddUserIdToUtilitiesTable extends Migration
     public function down()
     {
         Schema::table('utilities', function (Blueprint $table) {
-            //
+            $table->unsignedBigInteger("user_id")->nullable();
+            $table->foreign("user_id")->references("id")->on("users")->onUpdate('cascade')->onDelete('cascade');
         });
     }
 }
