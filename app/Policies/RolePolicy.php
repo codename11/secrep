@@ -31,6 +31,11 @@ class RolePolicy
      */
     public function view(User $user, Role $role)
     {
+        return ($user->id || $user->role->name=="admin" || $user->role->name=="user") ? Response::allow() : Response::deny('Access denied.');
+    }
+
+    public function update_user_role(User $user, Role $role)
+    {
         return ($user->role->name=="admin") ? Response::allow() : Response::deny('Access denied.');
     }
 

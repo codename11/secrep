@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\User;
 
 class RolesController extends Controller
 {
@@ -37,6 +38,48 @@ class RolesController extends Controller
 
                 $response = array(
                     "message" => "Method isn't GET.",
+                );
+                
+                return response()->json($response);
+            }
+
+        }
+        else{
+
+            $response = array(
+                "message" => "Request isn't Ajax.",
+            );
+            
+            return response()->json($response);
+
+        }
+
+    }
+
+    public function update_user_role(Request $request)
+    {
+        
+        if($request->ajax()){
+
+            if($request->isMethod("PATCH")){
+                            
+                $user = tap(User::with("role")->where("id", "=", $request->user_id))->update(['role_id' => $request->new_role_id])->get();
+
+                $roles = Role::all();
+                $this->authorize('update_user_role', $roles->first());
+                
+                $response = array(
+                    "message" => "bravo",
+                    "user" => $user
+                );
+                
+                return response()->json($response);
+
+            }
+            else{
+
+                $response = array(
+                    "message" => "Method isn't PATCH.",
                 );
                 
                 return response()->json($response);

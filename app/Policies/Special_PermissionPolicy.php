@@ -32,7 +32,7 @@ class Special_PermissionPolicy
      */
     public function view(User $user, Special_Permission $specialPermission)
     {
-        return ($user->id || $user->role->name=="admin") ? Response::allow() : Response::deny('Access denied.');
+        return ($user->id || $user->role->name=="admin" || $user->role->name=="user") ? Response::allow() : Response::deny('Access denied.');
     }
 
     /**

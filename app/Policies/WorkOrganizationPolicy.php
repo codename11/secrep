@@ -32,7 +32,7 @@ class WorkOrganizationPolicy
      */
     public function view(User $user, WorkOrganization $workOrganization)
     {
-        return ($user->id || $user->role->name=="admin") ? Response::allow() : Response::deny('Access denied.');
+        return ($user->id || $user->role->name=="admin" || $user->role->name=="user") ? Response::allow() : Response::deny('Access denied.');
     }
 
     /**

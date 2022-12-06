@@ -78,3 +78,4 @@ Route::patch('update_per_page','api\UtilitiesController@update')->middleware('au
 
 //Roles
 Route::get('list_roles','api\RolesController@index')->middleware('auth:api');
+Route::patch('update_user_role','api\RolesController@update_user_role')->middleware('auth:api');
