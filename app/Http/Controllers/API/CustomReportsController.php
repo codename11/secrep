@@ -715,7 +715,7 @@ class CustomReportsController extends Controller
 
                         if(count($arr1)===0){
 
-                            $users = User::when($dates->start_date, function ($query, $date) {
+                            $users = User::with("role")->when($dates->start_date, function ($query, $date) {
                                 $query->where('updated_at', '>=', $date);
                             })
                             ->when($dates->end_date, function ($query, $date) {
