@@ -77,5 +77,5 @@ Route::post('create_per_page','api\UtilitiesController@store')->middleware('auth
 Route::patch('update_per_page','api\UtilitiesController@update')->middleware('auth:api');
 
 //Roles
-Route::get('list_roles','api\RolesController@index');
+Route::get('list_roles','api\RolesController@index')->middleware('auth:api');
 Route::patch('update_user_role','api\RolesController@update_user_role')->middleware('auth:api');
