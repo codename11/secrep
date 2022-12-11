@@ -140,5 +140,66 @@ class FirstTest extends TestCase
         $response->assertStatus(200);
 
     }
+
+    public function test_show_vehicle()
+    {
+        $request = [
+            "id" => 14
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create(["role_id" => 1]),
+            ["http://secrep.test/api/show_vehicle"]
+        );
+
+        $response = $this->get("http://secrep.test/api/show_vehicle", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        ->assertJsonStructure([
+            "message"
+        ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
+     
+        $response->assertStatus(200);
+
+    }
+
+    public function test_update_vehicle()
+    {
+        $request = [
+            "id" => 14,
+            "registration" => "KamionXYZ"
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create(["role_id" => 1]),
+            ["http://secrep.test/api/update_vehicle"]
+        );
+
+        $response = $this->patch("http://secrep.test/api/update_vehicle", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        ->assertJsonStructure([
+            "message"
+        ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
+     
+        $response->assertStatus(200);
+
+    }
+
+    public function test_delete_vehicle()
+    {
+        $request = [
+            "id" => 14
+        ];
+
+        Passport::actingAs(
+            factory(User::class)->create(["role_id" => 1]),
+            ["http://secrep.test/api/delete_vehicle"]
+        );
+
+        $response = $this->delete("http://secrep.test/api/delete_vehicle", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        ->assertJsonStructure([
+            "message"
+        ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
+     
+        $response->assertStatus(200);
+
+    }
     
 }
