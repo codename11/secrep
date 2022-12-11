@@ -9,6 +9,15 @@ use Laravel\Passport\Passport;
 use App\User;
 use App\Vehicle;
 //https://www.bacancytechnology.com/blog/feature-testing-in-laravel
+//php artisan test
+//https://laravel.com/docs/5.1/testing
+//https://laravel-news.com/how-to-start-testing
+/*
+php artisan cache:clear
+php artisan route:clear
+php artisan config:clear
+php artisan view:clear
+*/
 class FirstTest extends TestCase
 {
     /**
@@ -72,7 +81,7 @@ class FirstTest extends TestCase
             ["http://secrep.test/api/list_vehicles"]
         );
 
-        //Simulation of post method via ajax request and checking if retuned result have proper json structure.
+        //Simulation of post method via ajax request and checking if returned result have proper json structure.
         $response = $this->post("http://secrep.test/api/list_vehicles", $request, ["X-Requested-With" => "XMLHttpRequest"]/*Test if request is ajax*/)
         ->assertJsonStructure([
             "message",
@@ -110,7 +119,7 @@ class FirstTest extends TestCase
 
     }
 
-    /*public function test_create_vehicle()
+    public function test_create_vehicle()
     {
         $request = [
             "registration" => "KamionX",
@@ -119,11 +128,11 @@ class FirstTest extends TestCase
         ];
 
         Passport::actingAs(
-            factory(User::class)->create(),
+            factory(User::class)->create(["role_id" => 1]),
             ["http://secrep.test/api/create_vehicle"]
         );
 
-        $response = $this->post("http://secrep.test/api/create_vehicle", $request)
+        $response = $this->post("http://secrep.test/api/create_vehicle", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -131,5 +140,5 @@ class FirstTest extends TestCase
         $response->assertStatus(200);
 
     }
-    */
+    
 }
