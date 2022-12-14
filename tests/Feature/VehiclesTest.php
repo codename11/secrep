@@ -11,7 +11,7 @@ use App\Vehicle;
   
 //https://www.bacancytechnology.com/blog/feature-testing-in-laravel
 //php artisan test
-//https://laravel.com/docs/5.1/testing
+//https://laravel.com/docs/9.x/testing#main-content
 //https://laravel-news.com/how-to-start-testing
 //https://www.youtube.com/watch?v=J0OFwSk9iV8&ab_channel=Laraveller
 //DELETE FROM `users` WHERE id not in ('1','41')
@@ -43,8 +43,9 @@ class VehiclesTest extends TestCase
         ];
 
         //Simulation of passing on token.
+        $user = User::first();
         Passport::actingAs(
-            factory(User::class)->create(),
+            $user,
             ["http://secrep.test/api/list_vehicles"]
         );
 
@@ -94,8 +95,9 @@ class VehiclesTest extends TestCase
             "workOrg" => 1
         ];
 
+        $user = User::first();
         Passport::actingAs(
-            factory(User::class)->create(["role_id" => 1]),
+            $user,
             ["http://secrep.test/api/create_vehicle"]
         );
 
@@ -114,8 +116,9 @@ class VehiclesTest extends TestCase
             "id" => 14
         ];
         
+        $user = User::first();
         Passport::actingAs(
-            factory(User::class)->create(["role_id" => 1]),
+            $user,
             ["http://secrep.test/api/show_vehicle"]
         );
 
@@ -137,8 +140,9 @@ class VehiclesTest extends TestCase
             "workOrg" => 1
         ];
 
+        $user = User::first();
         Passport::actingAs(
-            factory(User::class)->create(["role_id" => 1]),
+            $user,
             ["http://secrep.test/api/update_vehicle"]
         );
 
@@ -157,8 +161,9 @@ class VehiclesTest extends TestCase
             "id" => 14
         ];
 
+        $user = User::first();
         Passport::actingAs(
-            factory(User::class)->create(["role_id" => 1]),
+            $user,
             ["http://secrep.test/api/delete_vehicle"]
         );
 

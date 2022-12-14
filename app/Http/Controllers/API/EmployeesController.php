@@ -90,7 +90,7 @@ class EmployeesController extends Controller
         if($request->ajax()){
 
             if($validation->fails()){
-
+                
                 $response = array(
                     "message" => "Failed",
                     "errors" => $errors,
@@ -100,7 +100,7 @@ class EmployeesController extends Controller
 
             }
             else{
-
+                
                 if($request->isMethod("post")){
 
                     $tmp = Employee::where('lastName', '=', $request->lastName)->where('firstName', '=', $request->firstName)->with("work_organization", "enteredBy")->first();
@@ -125,7 +125,7 @@ class EmployeesController extends Controller
                         $employee->avatar = $fileNameToStore;
                         $this->authorize('create', $employee);
                         $employee->save();
-        
+                        
                         $response = array(
                             "message" => "bravo",
                             "employee" => Employee::with("work_organization", "enteredBy")->find($employee->id),

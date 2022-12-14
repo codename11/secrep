@@ -121,8 +121,9 @@ class DeliveriesController extends Controller
                     $delivery->save();
 
                     $ifToManyTrucks = 0;
+                    
                     for($i=0;$i<count($request->vehicles);$i++){
-
+                        
                         $tmp1 = Vehicle::with("type")->find($request->vehicles[$i])->type->id;
                         if($tmp1 == 1){
 
@@ -144,17 +145,18 @@ class DeliveriesController extends Controller
     
                         }
     
-                        for($i=0;$i<count($request->delivery_note);$i++){
+                        for($i=0;$i<count($request->delivery_notes);$i++){
     
                             $delivery_details = new Delivery_details;
                             $delivery_details->delivery_id = $delivery->id;
-                            $delivery_details->delivery_note = $request->delivery_note[$i];
+                            $delivery_details->delivery_note = $request->delivery_notes[$i];
                             $delivery_details->sec_id = $request->sec_id;
                             $delivery_details->save();
     
                         }
         
                         $response = array(
+                            "message" => "bravo",
                             "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->find($delivery->id),
                         );
                         
@@ -328,7 +330,7 @@ class DeliveriesController extends Controller
                         }
                     }
                     
-                    if($ifToManyTrucks == 1){
+                    if($ifToManyTrucks <= 1){
 
                         if(is_iterable($request->vehicles)){
                             for($i=0;$i<count($request->vehicles);$i++){

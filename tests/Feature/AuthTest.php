@@ -11,7 +11,7 @@ use App\Vehicle;
 
 //https://www.bacancytechnology.com/blog/feature-testing-in-laravel
 //php artisan test
-//https://laravel.com/docs/5.1/testing
+//https://laravel.com/docs/9.x/testing#main-content
 //https://laravel-news.com/how-to-start-testing
 //https://www.youtube.com/watch?v=J0OFwSk9iV8&ab_channel=Laraveller
 //DELETE FROM `users` WHERE id not in ('1','41')

@@ -109,6 +109,7 @@ class Special_PermissionsController extends Controller
                     $specialPermission->save();
 
                     $response = array(
+                        "message" => "bravo",
                         "specialPermission" => $specialPermission->with("user", "vehicles")->find($specialPermission->id),
                     );
                     
@@ -263,6 +264,7 @@ class Special_PermissionsController extends Controller
                     $specialPermission->save();
     
                     $response = array(
+                        "message" => "bravo",
                         "specialPermission" => $specialPermission,
                     );
                     
@@ -332,6 +334,7 @@ class Special_PermissionsController extends Controller
                     $specialPermission->delete();
 
                     $response = array(
+                        "message" => "bravo",
                         "specialPermission" => $specialPermission,
                     );
                     

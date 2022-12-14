@@ -14,9 +14,10 @@ use App\Vehicle;
 //https://laravel.com/docs/9.x/testing#main-content
 //https://laravel-news.com/how-to-start-testing
 //https://www.youtube.com/watch?v=J0OFwSk9iV8&ab_channel=Laraveller
-//DELETE FROM `users` WHERE id not in ('1','41')
+//DELETE FROM `users` WHERE id NOT BETWEEN 1 AND 2
 //DELETE FROM `vehicles` WHERE id NOT BETWEEN 1 AND 15
 //DELETE FROM `work_organizations` WHERE id NOT BETWEEN 1 AND 3
+//DELETE FROM `special_permissions` WHERE id NOT BETWEEN 1 AND 3
 //$user1 = User::where("id", "=", 1)->get();
 //$user2 = ["id" => 1, "name" => "veljko", "email" => "veljkos82@gmail.com", "role_id" => 1, "email_verified_at" => null, "password" => '$2y$10$BWieAhdzRxUX4ndW.6Ki4u8eix5AtYhOJl6dB4YbVAAZr8xg/IXTa', "remember_token" => null, "created_at" => "2012-07-17 17:18:59", "updated_at" => "2022-12-07 17:20:58", "special_permission_id" => 1, "deleted_at" => null];
 /*
@@ -28,7 +29,7 @@ php artisan view:clear
 //Target specific test: php artisan test --filter *nameoftest*
 //Need to be on lookout for soft deleted stuff...
 
-class WorkOrgTest extends TestCase
+class SpecPermTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -36,19 +37,21 @@ class WorkOrgTest extends TestCase
      * @return void
      */
 
-    public function test_create_work_organizations()
+    public function test_create_special_permissions()
     {
         $request = [
-            "name" => "Sigma"
+            "sec_id" => 1,
+            "permission_name" => "permissionZZZ",
+            "permission_description" => "permisijaZZZ"
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/create_work_organizations"]
+            ["http://secrep.test/api/create_special_permissions"]
         );
 
-        $response = $this->post("http://secrep.test/api/create_work_organizations", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->post("http://secrep.test/api/create_special_permissions", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -57,7 +60,7 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_list_work_organizations()
+    public function test_list_special_permission()
     {
         //Simulation of data entered by user.
         $request = [];
@@ -66,11 +69,11 @@ class WorkOrgTest extends TestCase
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/list_work_organizations"]
+            ["http://secrep.test/api/list_special_permissions"]
         );
 
         //Simulation of post method via ajax request and checking if returned result have proper json structure.
-        $response = $this->get("http://secrep.test/api/list_work_organizations", $request, ["X-Requested-With" => "XMLHttpRequest"]/*Test if request is ajax*/)
+        $response = $this->get("http://secrep.test/api/list_special_permissions", $request, ["X-Requested-With" => "XMLHttpRequest"]/*Test if request is ajax*/)
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -79,19 +82,19 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_show_work_organization()
+    public function test_show_special_permission()
     {
         $request = [
-            "id" => 4
+            "id" => 1
         ];
         
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/show_work_organization"]
+            ["http://secrep.test/api/show_special_permissions"]
         );
 
-        $response = $this->get("http://secrep.test/api/show_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->get("http://secrep.test/api/show_special_permissions", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -100,21 +103,22 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_update_work_organization()
+    public function test_update_special_permission()
     {
         $request = [
-            "id" => 4,
-            "name" => "SigmaX",
+            "id" => 1,
+            "permission_name" => "abc",
+            "permission_description" => "abc",
             "sec_id" => 1
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/update_work_organization"]
+            ["http://secrep.test/api/update_special_permissions"]
         );
 
-        $response = $this->patch("http://secrep.test/api/update_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->patch("http://secrep.test/api/update_special_permissions", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -123,19 +127,19 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_delete_work_organization()
+    public function test_delete_special_permission()
     {
         $request = [
-            "id" => 4
+            "id" => 1
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/delete_work_organization"]
+            ["http://secrep.test/api/delete_special_permissions"]
         );
 
-        $response = $this->delete("http://secrep.test/api/delete_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->delete("http://secrep.test/api/delete_special_permissions", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.

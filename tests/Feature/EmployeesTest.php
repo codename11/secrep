@@ -8,7 +8,9 @@ use Tests\TestCase;
 use Laravel\Passport\Passport;
 use App\User;
 use App\Vehicle;
-  
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 //https://www.bacancytechnology.com/blog/feature-testing-in-laravel
 //php artisan test
 //https://laravel.com/docs/9.x/testing#main-content
@@ -28,7 +30,7 @@ php artisan view:clear
 //Target specific test: php artisan test --filter *nameoftest*
 //Need to be on lookout for soft deleted stuff...
 
-class WorkOrgTest extends TestCase
+class EmployeesTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -36,19 +38,25 @@ class WorkOrgTest extends TestCase
      * @return void
      */
 
-    public function test_create_work_organizations()
+    public function test_create_employee()
     {
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image("avatar.jpg");
         $request = [
-            "name" => "Sigma"
+            "firstName" => "Tebra1",
+            "lastName" => "Tebric",
+            "work_org_id" => 1,
+            "sec_id" => 1,
+            "avatar" => $file
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/create_work_organizations"]
+            ["http://secrep.test/api/create_employee"]
         );
 
-        $response = $this->post("http://secrep.test/api/create_work_organizations", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->post("http://secrep.test/api/create_employee", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -57,7 +65,7 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_list_work_organizations()
+    public function test_list_employees()
     {
         //Simulation of data entered by user.
         $request = [];
@@ -66,11 +74,11 @@ class WorkOrgTest extends TestCase
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/list_work_organizations"]
+            ["http://secrep.test/api/list_employees"]
         );
 
         //Simulation of post method via ajax request and checking if returned result have proper json structure.
-        $response = $this->get("http://secrep.test/api/list_work_organizations", $request, ["X-Requested-With" => "XMLHttpRequest"]/*Test if request is ajax*/)
+        $response = $this->get("http://secrep.test/api/list_employees", $request, ["X-Requested-With" => "XMLHttpRequest"]/*Test if request is ajax*/)
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -79,19 +87,19 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_show_work_organization()
+    public function test_show_employee()
     {
         $request = [
-            "id" => 4
+            "id" => 14
         ];
         
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/show_work_organization"]
+            ["http://secrep.test/api/show_employee"]
         );
 
-        $response = $this->get("http://secrep.test/api/show_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->get("http://secrep.test/api/show_employee", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -100,21 +108,27 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_update_work_organization()
+    public function test_update_employee()
     {
+
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image("avatar.jpg");
         $request = [
-            "id" => 4,
-            "name" => "SigmaX",
-            "sec_id" => 1
+            "id" => 14,
+            "firstName" => "Tebra",
+            "lastName" => "Tebric",
+            "work_org_id" => 1,
+            "sec_id" => 1,
+            "avatar" => $file
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/update_work_organization"]
+            ["http://secrep.test/api/update_employee"]
         );
 
-        $response = $this->patch("http://secrep.test/api/update_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->patch("http://secrep.test/api/update_employee", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
@@ -123,19 +137,19 @@ class WorkOrgTest extends TestCase
 
     }
 
-    public function test_delete_work_organization()
+    public function test_delete_employee()
     {
         $request = [
-            "id" => 4
+            "id" => 20
         ];
 
         $user = User::first();
         Passport::actingAs(
             $user,
-            ["http://secrep.test/api/delete_work_organization"]
+            ["http://secrep.test/api/delete_employee"]
         );
 
-        $response = $this->delete("http://secrep.test/api/delete_work_organization", $request, ["X-Requested-With" => "XMLHttpRequest"])
+        $response = $this->delete("http://secrep.test/api/delete_employee", $request, ["X-Requested-With" => "XMLHttpRequest"])
         ->assertJsonStructure([
             "message"
         ]);// A "message"(just string) is my personal way of aknowledging if correct results are returned.
