@@ -41,6 +41,7 @@ class UtilitiesController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
+                "user_id" => "required|numeric",
                 "per_page" => "required|numeric"
             ]
         );
@@ -62,14 +63,25 @@ class UtilitiesController extends Controller
 
                 if($request->isMethod("post")){
 
-                    $user_id = auth()->user()->id;
+                    $user_id = $request->user_id;
+                    
                     $ifExists = Utility::where("user_id", $user_id)->first();
-                    $this->authorize('create', $ifExists);
-                    if(!$ifExists){
+                    
+                    $utility = $ifExists ? $ifExists : Utility::take(1)->first();
+                    
+                    $this->authorize('create', $utility);
+
+                    if($ifExists===null){
                         $per_page = new Utility;
                         $per_page->per_page = $request->per_page;
-                        $per_page->user_id = auth()->user()->id;
+                        $per_page->user_id = $user_id;
                         $per_page->save();
+
+                        $response = array(
+                            "message" => "bravo"
+                        );
+                        
+                        return response()->json($response);
                     }
                     else{
 

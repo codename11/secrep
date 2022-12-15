@@ -252,9 +252,12 @@ class CustomReportsController extends Controller
 
                     }
 
+                    /*
+                    "linkovi" => (string)Vehicle::paginate($per_page)->onEachSide(1)->links()
+                    */
                     $response = array(
-                        "vehicles" => $vehicles,
-                        "linkovi" => (string)Vehicle::paginate($per_page)->onEachSide(1)->links()
+                        "message" => "bravo",
+                        "vehicles" => $vehicles
                     );
                     
                     return response()->json($response);
@@ -430,6 +433,7 @@ class CustomReportsController extends Controller
                     }
 
                     $response = array(
+                        "message" => "bravo",
                         "deliveries" => $deliveries
             
                     );
@@ -560,6 +564,7 @@ class CustomReportsController extends Controller
                     }
 
                     $response = array(
+                        "message" => "bravo",
                         "employees" => $employees
             
                     );
@@ -727,6 +732,7 @@ class CustomReportsController extends Controller
                     }
 
                     $response = array(
+                        "message" => "bravo",
                         "users" => $users
                     );
                     return response()->json($response);
