@@ -138,7 +138,7 @@ class DeliveryTest extends TestCase
             "id" => 1
         ];
 
-        $user = User::first();
+        $user = User::with("role")->first();
         Passport::actingAs(
             $user,
             ["http://secrep.test/api/delete_delivery"]

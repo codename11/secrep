@@ -114,7 +114,7 @@ class EmployeesTest extends TestCase
         Storage::fake('avatars');
         $file = UploadedFile::fake()->image("avatar.jpg");
         $request = [
-            "id" => 14,
+            "id" => 6,
             "firstName" => "Tebra",
             "lastName" => "Tebric",
             "work_org_id" => 1,
@@ -140,10 +140,10 @@ class EmployeesTest extends TestCase
     public function test_delete_employee()
     {
         $request = [
-            "id" => 20
+            "id" => 6
         ];
 
-        $user = User::first();
+        $user = User::with("role")->first();
         Passport::actingAs(
             $user,
             ["http://secrep.test/api/delete_employee"]

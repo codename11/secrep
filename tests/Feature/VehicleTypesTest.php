@@ -125,7 +125,7 @@ class VehicleTypesTest extends TestCase
     public function test_delete_vehicle_pivot()
     {
         $request = [
-            "id" => 1
+            "id" => 11
         ];
 
         $user = User::first();

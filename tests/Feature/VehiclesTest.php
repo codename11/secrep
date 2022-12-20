@@ -43,7 +43,7 @@ class VehiclesTest extends TestCase
         ];
 
         //Simulation of passing on token.
-        $user = User::first();
+        $user = User::with("role")->first();
         Passport::actingAs(
             $user,
             ["http://secrep.test/api/list_vehicles"]
@@ -113,7 +113,7 @@ class VehiclesTest extends TestCase
     public function test_show_vehicle()
     {
         $request = [
-            "id" => 14
+            "id" => 1
         ];
         
         $user = User::first();
@@ -134,7 +134,7 @@ class VehiclesTest extends TestCase
     public function test_update_vehicle()
     {
         $request = [
-            "id" => 14,
+            "id" => 1,
             "registration" => "KamionXYZ",
             "vehicle_type_id" => 1,
             "workOrg" => 1
@@ -158,10 +158,10 @@ class VehiclesTest extends TestCase
     public function test_delete_vehicle()
     {
         $request = [
-            "id" => 14
+            "id" => 9
         ];
 
-        $user = User::first();
+        $user = User::with("role")->first();
         Passport::actingAs(
             $user,
             ["http://secrep.test/api/delete_vehicle"]
