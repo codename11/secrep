@@ -268,7 +268,7 @@ class VehiclesController extends Controller
                 "id" => "required|numeric",
                 'registration' => 'required|max:255',
                 "vehicle_type_id" => "nullable|numeric",
-                'workOrg' => 'nullable|max:255'
+                'workOrg' => 'nullable|numeric'
             ]
         );
         $errors = $validation->errors();

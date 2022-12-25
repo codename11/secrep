@@ -153,6 +153,7 @@ class UtilitiesController extends Controller
         $validation = Validator::make(
             $request->all(),
             [
+                "user_id" => "required|numeric",
                 "per_page_id" => "required|numeric",
                 "per_page" => "required|numeric"
             ]
@@ -175,7 +176,7 @@ class UtilitiesController extends Controller
 
                 if($request->isMethod("patch")){
 
-                    $user_id = auth()->user()->id;
+                    $user_id = $request->user_id;
                     $per_page_id = $request->per_page_id;
                     $per_page = Utility::where("user_id", $user_id)->find($per_page_id);
                     if($per_page){

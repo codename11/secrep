@@ -8,6 +8,21 @@ use Tests\TestCase;
 use App\User;
 use Laravel\Passport\Passport;
 
+//https://www.bacancytechnology.com/blog/feature-testing-in-laravel
+//https://laravel.com/docs/9.x/testing#main-content
+//https://laravel-news.com/how-to-start-testing
+//https://www.youtube.com/watch?v=J0OFwSk9iV8&ab_channel=Laraveller
+/*
+php artisan cache:clear
+php artisan route:clear
+php artisan config:clear
+php artisan view:clear
+*/
+//php artisan test
+//Target specific test: php artisan test --filter *nameoftest*
+//php artisan make:test *nameoftest*
+//Need to be on lookout for soft deleted stuff...
+
 class RolesTest extends TestCase
 {
     /**
