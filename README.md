@@ -19,8 +19,8 @@
  Example:
  ```
     {
-        "type": "truck", \*Not required\*
-        "workOrg": "Alpha Trucking Co." \*Not required\*
+        "type": "truck", //Not required
+        "workOrg": "Alpha Trucking Co." //Not required
     }
 ```
 
