@@ -1,14 +1,14 @@
 # Api for security / monitoring companies
 
-## An api for security / monitoring persons and vehicles entering and leaving facilities. Very cusomizable.
+## An api for security / monitoring persons and vehicles entering and leaving facilities. Very customizable.
 
 ### Endpoints:
 
 #### Authentication routes:
 
- - Register user: `api/register`, method is `POST`. Has these fields: name, email, password, password_confirmation. It's `formData`.
+ - Register user: `api/register`, method is `POST`. Has these fields: name, email, password, password_confirmation. All of them are required. It's `formData`.
 
- - Login user: `api/login`, method is `POST`. Has these fields: email and password. It's `formData`.
+ - Login user: `api/login`, method is `POST`. Has these fields: email and password. All of them are required. It's `formData`.
 
  - Logout user: `api/logout`, method is `POST`. It doesn't have any fields. It's `formData`.
 
@@ -171,15 +171,15 @@ Example:
  ```
  {
     "id": 1, //Required
-    "load_place": "Smederevo2", //Required
-    "unload_place": "Aranđelovac1", //Required
-    "comment": "isporuka", //Required
-    "time_in": "06:24", //Required
-    "time_out": "07:22", //Required
-    "vehicles": [1, 2], //Required
-    "delivery_notes": [67854654, 24566784], //Required
-    "operator_id": 1, //Required
-    "sec_id": 1 //Required
+    "load_place": "Smederevo2", //Not required
+    "unload_place": "Aranđelovac1", //Not required
+    "comment": "isporuka", //Not required
+    "time_in": "06:24", //Not required
+    "time_out": "07:22", //Not required
+    "vehicles": [1, 2], //Not required
+    "delivery_notes": [67854654, 24566784], //Not required
+    "operator_id": 1, //Not required
+    "sec_id": 1 //Not required
  }
  ```
 
@@ -221,8 +221,9 @@ Example:
  ```
     {
         "id": 1, //Required
-        "permission_name": "permission1", //Required
-        "permission_description": "xxx" //Required
+        "permission_name": "permission1", //Not required
+        "permission_description": "xxx", //Not required
+        "sec_id": 1 //Required
     }
  ```
 
@@ -244,14 +245,14 @@ Example:
  Example:
  ```
     {
-        "start_date": "17/07/2021", //Required
-        "end_date": "30/07/2021", //Required
+        "start_date": "17/07/2021", //Not required
+        "end_date": "30/07/2021", //Not required
         "vehicle_id": 1, //Not required
         "vehicle": [
             "user",
             "type",
             "workOrganization"
-        ] //Required
+        ] //Not required
     }
  ```
 
@@ -260,14 +261,14 @@ Example:
  Example:
  ```
     {
-        "start_date": "17/07/2021", //Required
-        "end_date": "30/01/2022", //Required
-        "delivery_id": 1, //Not required //Required
+        "start_date": "17/07/2021", //Not required
+        "end_date": "30/01/2022", //Not required
+        "delivery_id": 1, //Not required
         "delivery": [
             "operator",
             "enteredBy",
             "complement"
-        ] //Required
+        ] //Not required
     }
  ```
 
@@ -276,14 +277,14 @@ Example:
  Example:
  ```
      {
-         "start_date": "17/07/2021", //Required
-         "end_date": "30/01/2022", //Required
+         "start_date": "17/07/2021", //Not required
+         "end_date": "30/01/2022", //Not required
          "employee_id": 1, //Not required
          "employee": [
              "work_organization",
              "enteredBy",
              "deliveries"
-         ] //Required
+         ] //Not required
      }
  ```
 
@@ -293,8 +294,8 @@ Example:
  Example:
  ```
     {
-    "start_date": "17/07/2021", //Required
-    "end_date": "30/01/2022", //Required
+    "start_date": "17/07/2021", //Not required
+    "end_date": "30/01/2022", //Not required
     "user_id": 1, //Not required
     "user": [
         "role",
@@ -304,7 +305,7 @@ Example:
         "delivery_details",
         "special_permissions",
         "employees"
-    ] //Required
+    ] //Not required
  }
 ```
 

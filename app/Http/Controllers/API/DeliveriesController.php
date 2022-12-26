@@ -207,29 +207,49 @@ class DeliveriesController extends Controller
      */
     public function show(Request $request)
     {
-        
+        $validation = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required|nueric'
+            ]
+        );
+        $errors = $validation->errors();
+
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($validation->fails()){
 
-                $delivery = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($request->id);
-                $this->authorize('view', $delivery);
-                
                 $response = array(
-                    "message" => "bravo",
-                    "delivery" => $delivery,
+                    "message" => "Failed",
+                    "errors" => $errors
                 );
-                
                 return response()->json($response);
 
             }
             else{
 
-                $response = array(
-                    "message" => "Method isn't GET.",
-                );
-                
-                return response()->json($response);
+                if($request->isMethod("get")){
+
+                    $delivery = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization")->find($request->id);
+                    $this->authorize('view', $delivery);
+                    
+                    $response = array(
+                        "message" => "bravo",
+                        "delivery" => $delivery,
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+    
+                    $response = array(
+                        "message" => "Method isn't GET.",
+                    );
+                    
+                    return response()->json($response);
+                }
+
             }
 
         }
@@ -273,8 +293,8 @@ class DeliveriesController extends Controller
                 'load_place' => 'max:255',
                 "unload_place" => 'max:255',
                 "comment" => 'max:255',
-                'time_in' => 'required|date_format:d/m/Y H:i',
-                'time_out' => 'required|date_format:d/m/Y H:i',
+                'time_in' => 'date_format:d/m/Y H:i',
+                'time_out' => 'date_format:d/m/Y H:i',
                 "vehicles" => 'array',
                 "vehicles.*" => "integer",
                 "delivery_notes" => 'array',
