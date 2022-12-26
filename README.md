@@ -6,9 +6,11 @@
 
 #### Authentication routes:
 
- - Register user: `api/register`, method is `POST`. Has these fields: name, email, password, password_confirmation.
+ - Register user: `api/register`, method is `POST`. Has these fields: name, email, password, password_confirmation. It's `formData`.
 
- - Login user: `api/login`, method is `POST`. Has these fields: email and password.
+ - Login user: `api/login`, method is `POST`. Has these fields: email and password. It's `formData`.
+
+ - Logout user: `api/logout`, method is `POST`. It doesn't have any fields. It's `formData`.
 
 #### Vehicle endpoints: 
 
@@ -17,8 +19,8 @@
  Example:
  ```
     {
-        "type": "truck",
-        "workOrg": "Alpha Trucking Co."
+        "type": "truck", \*Not required\*
+        "workOrg": "Alpha Trucking Co." \*Not required\*
     }
 ```
 
@@ -27,9 +29,9 @@
  Example: 
  ```
  {
-    "registration": "Kamion2",
-    "vehicle_type_id": 1,
-    "workOrg": 1
+    "registration": "Kamion2", //Required
+    "vehicle_type_id": 1, //Required
+    "workOrg": 1 //Not required
 }
 ```
 
@@ -38,7 +40,7 @@
 Example:
 ```
 {
-    "id": 14
+    "id": 14 //Required
 }
 ```
 
@@ -47,9 +49,10 @@ Example:
 Example:
 ```
 {
-    "id": 14,
-    "registration": "8787x",
-    "workOrg": 1
+    "id": 14, //Required
+    "registration": "8787x", //Required
+    "vehicle_type_id": 1 //Not required
+    "workOrg": 1 //Not required
 }
 ```
 
@@ -58,7 +61,7 @@ Example:
 Example:
 ```
     {
-        "id": 14
+        "id": 14 //Required
     }
 ```
 
@@ -69,7 +72,7 @@ Example:
 Example:
 ```
     {
-        "name": "Alpha Trucking Co."
+        "name": "Alpha Trucking Co." //Required
     }
 ```
 
@@ -80,26 +83,33 @@ Example:
  Example:
  ```
     {
-        "id": 1
+        "id": 1 //Required
     }
 ```
 
- - Update work organization: `update_work_organization`, method is `PATCH` with two semi optional parameters and one required(id).
+ - Update work organization: `update_work_organization`, method is `PATCH` with `id` of workOrg and it's `name` and `sec_id`.
 
  Example:
  ```
  {
-    "id": 1,
-    "name": "Alpha",
-    "sec_id": 1
-}
+    "id": 1, //Required
+    "name": "Alpha", //Required
+    "sec_id": 1 //Required
+ }
 ```
 
- - Delete work organization: `delete_work_organization`, method is `DELETE` with required parameter of `id`. It's same as any other delition.
+ - Delete work organization: `delete_work_organization`, method is `DELETE` with required parameter of `id`. It's same as any other deletion.
+
+ Example:
+ ```
+ {
+    "id": 1 //Required
+ }
+```
 
 #### Employees endpoints:
 
- - Create employee: `create_employee`, method is `POST`. This is little bit different. It also got an avatar which is basically an image which is uploaded for particular employee. Apart from that it also have an, `lastName`, `firstName`, `work_org_id`, `sec_id` fields. Last mentioned is `id` of security official who entered his info.
+ - Create employee: `create_employee`, method is `POST`. This is little bit different. It also got an avatar which is basically an image which is uploaded for particular employee. Apart from that it also have an, `lastName`, `firstName`, `work_org_id`, `sec_id` fields. Last mentioned is `id` of security official who entered his info. All of them are required, except avatar image. There is default one until user decides to updates it. It's `formData`.
 
  - List employees: `list_employees`, method is `GET` without parameters.
 
@@ -108,13 +118,20 @@ Example:
  Example:
  ```
     {
-        "id": 1
+        "id": 1 //Required
     }
 ```
 
- - Update employee: `update_employee`, method is `PATCH` with same set of parameters like creating, but with added `id` for existing employee.
+ - Update employee: `update_employee`, method is `PATCH` with same set of parameters like creating, but with added `id` for existing employee. Only `id` is required. It's also `formData`.
 
  - Delete employee: `delete_employee`, method is `DELETE` with single parameter of `id`. Same as previous.
+
+  Example:
+ ```
+    {
+        "id": 1 //Required
+    }
+```
 
 #### Delivery endpoints:
 
@@ -123,21 +140,15 @@ Example:
  Example:
  ```
     {
-        "load_place": "Smederevo1",
-        "unload_place": "Aranđelovac1",
-        "comment": "isporuka",
-        "time_in": "06:24",
-        "time_out": "07:22",
-        "vehicles": {
-            "truck_id": 1,
-            "cistern_id": 2
-        },
-        "delivery_notes": {
-            "num1": 67854654,
-            "num2": 24566784
-        },
-        "operator_id": 1,
-        "sec_id": 1
+        "load_place": "Smederevo1", //Required
+        "unload_place": "Aranđelovac1", //Required
+        "comment": "isporuka", //Required
+        "time_in": "06:24", //Required
+        "time_out": "07:22", //Required
+        "vehicles": [1, 2], //Required
+        "delivery_notes": [67854654, 24566784], //Required
+        "operator_id": 1, //Required
+        "sec_id": 1 //Required
     }
  ```
 "time_out" and "time_in" parameters are when vehicle passed the gate, make their delivery and and came back.
@@ -150,7 +161,7 @@ Example:
  Example:
  ```
      {
-        "id": 2
+        "id": 2 //Required
      }
  ```
 
@@ -159,22 +170,16 @@ Example:
  Example:
  ```
  {
-    "id": 1,
-    "load_place": "Smederevo2",
-    "unload_place": "Aranđelovac1",
-    "comment": "isporuka",
-    "time_in": "06:24",
-    "time_out": "07:22",
-    "vehicles": {
-        "truck_id": 1,
-        "cistern_id": 2
-    },
-    "delivery_notes": {
-        "num1": 67854654,
-        "num2": 24566784
-    },
-    "operator_id": 1,
-    "sec_id": 1
+    "id": 1, //Required
+    "load_place": "Smederevo2", //Required
+    "unload_place": "Aranđelovac1", //Required
+    "comment": "isporuka", //Required
+    "time_in": "06:24", //Required
+    "time_out": "07:22", //Required
+    "vehicles": [1, 2], //Required
+    "delivery_notes": [67854654, 24566784], //Required
+    "operator_id": 1, //Required
+    "sec_id": 1 //Required
  }
  ```
 
@@ -183,7 +188,7 @@ Example:
  Example:
  ```
     {
-        "id": 1
+        "id": 1 //Required
     }
  ```
 
@@ -194,8 +199,8 @@ Example:
  Example:
  ```
     {
-        "permission_name": "permission2",
-        "permission_description": "druga permisija"
+        "permission_name": "permission2", //Required
+        "permission_description": "druga permisija" //Required
     }
  ```
 
@@ -206,7 +211,7 @@ Example:
  Example: 
  ```
     {
-        "id": 1
+        "id": 1 //Required
     }
  ```
 
@@ -215,9 +220,9 @@ Example:
  Example:
  ```
     {
-        "id": 1,
-        "permission_name": "permission1",
-        "permission_description": "xxx"
+        "id": 1, //Required
+        "permission_name": "permission1", //Required
+        "permission_description": "xxx" //Required
     }
  ```
 
@@ -226,7 +231,7 @@ Example:
  Example:
  ```
     {
-        "id": 1
+        "id": 1 //Required
     }
  ```
 
@@ -239,14 +244,14 @@ Example:
  Example:
  ```
     {
-        "start_date": "17/07/2021",
-        "end_date": "30/07/2021",
-        "vehicle_id": 1,
+        "start_date": "17/07/2021", //Required
+        "end_date": "30/07/2021", //Required
+        "vehicle_id": 1, //Not required
         "vehicle": [
             "user",
             "type",
             "workOrganization"
-        ]
+        ] //Required
     }
  ```
 
@@ -255,13 +260,14 @@ Example:
  Example:
  ```
     {
-        "start_date": "17/07/2021",
-        "end_date": "30/01/2022",
+        "start_date": "17/07/2021", //Required
+        "end_date": "30/01/2022", //Required
+        "delivery_id": 1, //Not required //Required
         "delivery": [
             "operator",
             "enteredBy",
             "complement"
-        ]
+        ] //Required
     }
  ```
 
@@ -270,13 +276,14 @@ Example:
  Example:
  ```
      {
-         "start_date": "17/07/2021",
-         "end_date": "30/01/2022",
+         "start_date": "17/07/2021", //Required
+         "end_date": "30/01/2022", //Required
+         "employee_id": 1, //Not required
          "employee": [
              "work_organization",
              "enteredBy",
              "deliveries"
-         ]
+         ] //Required
      }
  ```
 
@@ -286,8 +293,9 @@ Example:
  Example:
  ```
     {
-    "start_date": "17/07/2021",
-    "end_date": "30/01/2022",
+    "start_date": "17/07/2021", //Required
+    "end_date": "30/01/2022", //Required
+    "user_id": 1, //Not required
     "user": [
         "role",
         "vehicles",
@@ -296,7 +304,7 @@ Example:
         "delivery_details",
         "special_permissions",
         "employees"
-    ]
+    ] //Required
  }
 ```
 
@@ -311,7 +319,7 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
  Example:
  ```
     {
-        "name": test1
+        "name": test1 //Required
     }
  ```
 
@@ -320,7 +328,7 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
  Example:
  ```
     {
-        "id": 3
+        "id": 3 //Required
     }
  ```
 
@@ -329,8 +337,8 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
  Example:
  ```
     {
-        "id": 3,
-        "name": "test123"
+        "id": 3, //Required
+        "name": "test123" //Required
     }
  ```
  
@@ -339,7 +347,7 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
   Example:
  ```
     {
-        "id": 3
+        "id": 3 //Required
     }
  ```
   All of endpoints have this header:

@@ -148,27 +148,50 @@ class WorkOrganizationController extends Controller
     public function show(Request $request)
     {
         
+        $validation = Validator::make(
+            $request->all(),
+            [
+                "id" => "required|numeric",
+            ]
+        );
+        $errors = $validation->errors();
+
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($validation->fails()){
 
-                $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id);
-                $this->authorize('view', $workOrganization);
                 $response = array(
-                    "message" => "bravo",
-                    "workOrganization" => $workOrganization,
+                    "message" => "Failed",
+                    "errors" => $errors,
+    
                 );
-                
                 return response()->json($response);
 
             }
             else{
 
-                $response = array(
-                    "message" => "Method isn't GET.",
-                );
+                if($request->isMethod("get")){
                 
-                return response()->json($response);
+                    $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id);
+                    //$this->authorize('view', $workOrganization);
+                    $response = array(
+                        "message" => "bravo",
+                        "workOrganization" => $workOrganization,
+                        "ttt" => $request->all()
+                    );
+                    
+                    return response()->json($response);
+    
+                }
+                else{
+    
+                    $response = array(
+                        "message" => "Method isn't GET.",
+                    );
+                    
+                    return response()->json($response);
+                }
+
             }
 
         }
