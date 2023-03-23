@@ -297,7 +297,7 @@ class VehiclesController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "vehicle" => $vehicle,
+                        "vehicle" => Vehicle::with("workOrganization", "type")->find($request->id),
                         "vehicles" => Vehicle::with("workOrganization","type")->get()
                     );
                     
