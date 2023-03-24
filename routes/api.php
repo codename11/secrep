@@ -32,7 +32,7 @@ Route::delete('delete_vehicle','api\VehiclesController@destroy')->middleware('au
 
 //Work organizations
 Route::post('create_work_organizations','api\WorkOrganizationController@store')->middleware('auth:api');
-Route::get('list_work_organizations','api\WorkOrganizationController@index')->middleware('auth:api');
+Route::post('list_work_organizations','api\WorkOrganizationController@index')->middleware('auth:api');
 Route::get('show_work_organization','api\WorkOrganizationController@show')->middleware('auth:api');
 Route::patch('update_work_organization','api\WorkOrganizationController@update')->middleware('auth:api');
 Route::delete('delete_work_organization','api\WorkOrganizationController@destroy')->middleware('auth:api');

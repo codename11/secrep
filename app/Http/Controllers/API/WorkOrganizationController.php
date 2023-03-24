@@ -20,15 +20,17 @@ class WorkOrganizationController extends Controller
         
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($request->isMethod("post")){
                             
-                $workOrganizations = WorkOrganization::with("vehicles.type")->get();
+                $workOrganizations = WorkOrganization::with("vehicles.type");
 
                 $this->authorize('view', $workOrganizations->first());
                 
+                $paginated = $workOrganizations->paginate(2);
+
                 $response = array(
                     "message" => "bravo",
-                    "workOrganizations" => $workOrganizations,
+                    "workOrganizations" => $paginated
                 );
                 
                 return response()->json($response);
@@ -37,7 +39,7 @@ class WorkOrganizationController extends Controller
             else{
 
                 $response = array(
-                    "message" => "Method isn't GET.",
+                    "message" => "Method isn't POST.",
                 );
                 
                 return response()->json($response);
@@ -176,8 +178,7 @@ class WorkOrganizationController extends Controller
                     //$this->authorize('view', $workOrganization);
                     $response = array(
                         "message" => "bravo",
-                        "workOrganization" => $workOrganization,
-                        "ttt" => $request->all()
+                        "workOrganization" => $workOrganization
                     );
                     
                     return response()->json($response);
