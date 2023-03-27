@@ -20,15 +20,17 @@ class EmployeesController extends Controller
         
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($request->isMethod("post")){
                             
-                $employees = Employee::with("work_organization", "enteredBy", "deliveries")->get();
+                $employees = Employee::with("work_organization", "enteredBy", "deliveries");
 
                 $this->authorize('view', $employees->first());
                 
+                $paginated = $employees->paginate(2);
+
                 $response = array(
                     "message" => "bravo",
-                    "employees" => $employees,
+                    "employees" => $paginated,
                 );
                 
                 return response()->json($response);
@@ -37,7 +39,7 @@ class EmployeesController extends Controller
             else{
 
                 $response = array(
-                    "message" => "Method isn't GET.",
+                    "message" => "Method isn't POST.",
                 );
                 
                 return response()->json($response);

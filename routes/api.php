@@ -39,7 +39,7 @@ Route::delete('delete_work_organization','api\WorkOrganizationController@destroy
 
 //Employees
 Route::post('create_employee','api\EmployeesController@store')->middleware('auth:api');
-Route::get('list_employees','api\EmployeesController@index')->middleware('auth:api');
+Route::post('list_employees','api\EmployeesController@index')->middleware('auth:api');
 Route::get('show_employee','api\EmployeesController@show')->middleware('auth:api');
 Route::patch('update_employee','api\EmployeesController@update')->middleware('auth:api');
 Route::delete('delete_employee','api\EmployeesController@destroy')->middleware('auth:api');
