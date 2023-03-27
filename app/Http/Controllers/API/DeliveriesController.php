@@ -22,14 +22,16 @@ class DeliveriesController extends Controller
         
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($request->isMethod("post")){
                             
-                $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->get();
+                $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails");
                 $this->authorize('view', $deliveries->first());
                 
+                $paginated = $deliveries->paginate(2);
+
                 $response = array(
                     "message" => "bravo",
-                    "deliveries" => $deliveries,
+                    "deliveries" => $paginated,
                 );
                 
                 return response()->json($response);
@@ -38,7 +40,7 @@ class DeliveriesController extends Controller
             else{
 
                 $response = array(
-                    "message" => "Method isn't GET.",
+                    "message" => "Method isn't POST.",
                 );
                 
                 return response()->json($response);

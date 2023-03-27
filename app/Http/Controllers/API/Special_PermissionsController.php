@@ -19,15 +19,17 @@ class Special_PermissionsController extends Controller
         
         if($request->ajax()){
 
-            if($request->isMethod("get")){
+            if($request->isMethod("post")){
                             
-                $specialPermission = Special_Permission::with("user", "vehicles.type", "vehicles.workOrganization", "employees.work_organization")->get();
+                $specialPermission = Special_Permission::with("user", "vehicles.type", "vehicles.workOrganization", "employees.work_organization");
 
                 $this->authorize('view', $specialPermission->first());
                 
+                $paginated = $specialPermission->paginate(2);
+
                 $response = array(
                     "message" => "bravo",
-                    "specialPermission" => $specialPermission,
+                    "specialPermission" => $paginated,
                 );
                 
                 return response()->json($response);
@@ -36,7 +38,7 @@ class Special_PermissionsController extends Controller
             else{
 
                 $response = array(
-                    "message" => "Method isn't GET.",
+                    "message" => "Method isn't POST.",
                 );
                 
                 return response()->json($response);
