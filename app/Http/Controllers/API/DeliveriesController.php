@@ -87,11 +87,13 @@ class DeliveriesController extends Controller
                 'time_in' => 'required|date_format:d/m/Y H:i',
                 'time_out' => 'required|date_format:d/m/Y H:i',
                 "vehicles" => 'required|array',
+                "delivery_notes" => 'array',
                 "vehicles.*" => "required|integer",
                 'operator_id' => 'required|integer',
                 'sec_id' => 'required|integer'
             ]
         );
+        
         $errors = $validation->errors();
 
         if($request->ajax()){

@@ -51,13 +51,15 @@ class VehiclesController extends Controller
                             $query->where('name', '=', $request->type);
                         });
                     })
-                    ->with("workOrganization","type")
-                    ->get();
+                    ->with("workOrganization","type");
+
                     $this->authorize('view', $vehicles->first());
                     
+                    $paginated = $vehicles->paginate(2);
+
                     $response = array(
                         "message" => "bravo",
-                        "vehicles" => $vehicles
+                        "vehicles" => $paginated
                     );
                     
                     return response()->json($response);
