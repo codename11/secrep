@@ -107,10 +107,13 @@ class WorkOrganizationController extends Controller
                     $workOrganization->sec_id = auth()->user()->id; 
                     $this->authorize('create', $workOrganization);
                     $workOrganization->save();
-    
+
+                    $workOrganizations = WorkOrganization::with("vehicles.type");
+                    $paginated = $workOrganizations->paginate(2);
+
                     $response = array(
                         "message" => "bravo",
-                        "workOrganization" => $workOrganization->with("vehicles.type")->get(),
+                        "workOrganizations" => $paginated,
                     );
                     
                     return response()->json($response);
@@ -175,7 +178,7 @@ class WorkOrganizationController extends Controller
                 if($request->isMethod("get")){
                 
                     $workOrganization = WorkOrganization::with("vehicles.type")->find($request->id);
-                    //$this->authorize('view', $workOrganization);
+                    $this->authorize('view', $workOrganization);
                     $response = array(
                         "message" => "bravo",
                         "workOrganization" => $workOrganization

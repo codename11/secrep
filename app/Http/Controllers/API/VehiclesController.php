@@ -144,7 +144,7 @@ class VehiclesController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "vehicle" => $vehicle->with("type")->get(),
+                        "vehicle" => Vehicle::with("workOrganization","type")->find($vehicle->id),
                     );
                     
                     return response()->json($response);
@@ -299,8 +299,7 @@ class VehiclesController extends Controller
     
                     $response = array(
                         "message" => "bravo",
-                        "vehicle" => Vehicle::with("workOrganization", "type")->find($request->id),
-                        "vehicles" => Vehicle::with("workOrganization","type")->get()
+                        "vehicle" => Vehicle::with("workOrganization", "type")->find($request->id)
                     );
                     
                     return response()->json($response);
@@ -368,10 +367,12 @@ class VehiclesController extends Controller
                     $this->authorize('delete', $vehicle);
                     $vehicle->delete();
 
+                    $vehicles = Vehicle::with("workOrganization","type");
+                    $paginated = $vehicles->paginate(2);
+
                     $response = array(
                         "message" => "bravo",
-                        "vehicle" => $vehicle,
-                        "vehicles" => Vehicle::with("workOrganization","type")->get(),
+                        "vehicles" => $paginated,
                     );
                     
                     return response()->json($response);
