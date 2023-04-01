@@ -110,9 +110,12 @@ class Special_PermissionsController extends Controller
                     $this->authorize('create', $specialPermission);
                     $specialPermission->save();
 
+                    $specialPermissions = Special_Permission::with("user", "vehicles");
+                    $paginated = $specialPermissions->paginate(2);
+
                     $response = array(
                         "message" => "bravo",
-                        "specialPermission" => $specialPermission->with("user", "vehicles")->find($specialPermission->id),
+                        "specialPermission" => $paginated,
                     );
                     
                     return response()->json($response);

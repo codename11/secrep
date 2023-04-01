@@ -159,9 +159,11 @@ class DeliveriesController extends Controller
     
                         }
         
+                        $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails");
+                        $paginated = $deliveries->paginate(2);
                         $response = array(
                             "message" => "bravo",
-                            "delivery" => $delivery->with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization", "deliveryDetails")->find($delivery->id),
+                            "deliveries" => $paginated,
                         );
                         
                         return response()->json($response);
@@ -487,9 +489,12 @@ class DeliveriesController extends Controller
                     $this->authorize('delete', $delivery);
                     $delivery->delete();
 
+                    $deliveries = Delivery::with("operator.work_organization", "enteredBy", "complement.vehicles.type", "complement.vehicles.workOrganization");
+                    $paginated = $deliveries->paginate(2);
+
                     $response = array(
                         "message" => "bravo",
-                        "delivery" => $delivery,
+                        "deliveries" => $paginated,
                     );
                     
                     return response()->json($response);
