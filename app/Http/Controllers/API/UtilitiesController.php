@@ -207,7 +207,7 @@ class UtilitiesController extends Controller
                 else{
 
                     $response = array(
-                        "message" => "Method isn't POST.",
+                        "message" => "Method isn't PATCH.",
                     );
                     
                     return response()->json($response);
