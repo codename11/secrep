@@ -17,5 +17,6 @@ class VehiclePivotSeeder extends Seeder
                 ["name" => "cistern", "created_at" => NOW(), "updated_at" => NOW()]
             ]
         );
+
     }
 }
