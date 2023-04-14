@@ -23,7 +23,7 @@ https://github.com/codename11/fe_secrep
 
 #### Vehicle endpoints: 
 
- - List vehicles: `list_vehicles`, method is `GET` with optional parameters of type of vehicle and work organization that vehicles belongs to. If entered, these optional parameters narrow down on query. If not, it gives away all vehicles with description of their types and working organizations they belong to.
+ - List vehicles: `list_vehicles`, method is `POST` with optional parameters of type of vehicle and work organization that vehicles belongs to. If entered, these optional parameters narrow down on query. If not, it gives away all vehicles with description of their types and working organizations they belong to.
 
  Example:
  ```
@@ -85,7 +85,7 @@ Example:
     }
 ```
 
- - List work organizations: `list_work_organizations`, method is `GET` without parameters.
+ - List work organizations: `list_work_organizations`, method is `POST` without parameters.
 
  - Show work organization: `show_work_organization`, method is `GET` with single parameter of `id` for getting specific organization.
 
@@ -120,7 +120,7 @@ Example:
 
  - Create employee: `create_employee`, method is `POST`. This is little bit different. It also got an avatar which is basically an image which is uploaded for particular employee. Apart from that it also have an, `lastName`, `firstName`, `work_org_id`, `sec_id` fields. Last mentioned is `id` of security official who entered his info. All of them are required, except avatar image. There is default one until user decides to updates it. It's `formData`.
 
- - List employees: `list_employees`, method is `GET` without parameters.
+ - List employees: `list_employees`, method is `POST` without parameters.
 
  - Show employee: `show_employee`, method is `GET` with single parameter of `id`. It lists single employee.
 
@@ -131,7 +131,7 @@ Example:
     }
 ```
 
- - Update employee: `update_employee`, method is `PATCH` with same set of parameters like creating, but with added `id` for existing employee. Only `id` is required. It's also `formData`.
+ - Update employee: `update_employee`, method is `POST` with same set of parameters like creating, but with added `id` for existing employee. Only `id` is required. It's also `formData`.
 
  - Delete employee: `delete_employee`, method is `DELETE` with single parameter of `id`. Same as previous.
 
@@ -152,8 +152,8 @@ Example:
         "load_place": "Smederevo1", //Required
         "unload_place": "Aranđelovac1", //Required
         "comment": "isporuka", //Required
-        "time_in": "06:24", //Required
-        "time_out": "07:22", //Required
+        "time_in": "12/12/2022 01:22", //Required
+        "time_out": "12/12/2022 01:22", //Required
         "vehicles": [1, 2], //Required
         "delivery_notes": [67854654, 24566784], //Required
         "operator_id": 1, //Required
@@ -163,7 +163,7 @@ Example:
 "time_out" and "time_in" parameters are when vehicle passed the gate, make their delivery and and came back.
 "delivery_notes" are notes for specific delivery. Can be anything.
 
- - List deliveries: `list_deliveries`, method is `GET` without parameters. List all deliveries.
+ - List deliveries: `list_deliveries`, method is `POST` without parameters. List all deliveries.
 
  - Show delivery: `show_delivery`, method is `GET` with single parameter of `id` for getting specific delivery.
 
@@ -213,7 +213,7 @@ Example:
     }
  ```
 
- - List special permissions: `list_special_permissions`, method is `GET` without parameters.
+ - List special permissions: `list_special_permissions`, method is `POST` without parameters.
 
  - Show special permissions: `show_special_permissions`, method is `GET` with `id` for identifying specific one.
 
@@ -368,3 +368,14 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
     "Authorization": "Bearer " + auth.access_token
 
 ```
+
+#### Utilities i.e. for creating custom per page pagination:
+
+ - Create per page: `create_per_page`, method is `POST` with `user_id` who creates and `per_page` which says how many per page there should be. Mind you, if user already created per page, only update is available.
+
+ - Update per page: `update_per_page`, method is `PATCH` with `user_id`, `per_page_id` which is already existing "per page" we want to update and `per_page` which says to how many we want to update.
+
+#### Roles for of user. THey are set in seeders, but you can list'em and update them.
+
+ - List roles: `list_roles`, without parameters. Display roles.
+ - Updated particular user role: `update_user_role` does as stated. Method is `PATCH` with `user_id` of a user and `new_role_id` as a new role.

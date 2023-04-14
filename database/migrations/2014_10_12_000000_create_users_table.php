@@ -26,6 +26,15 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        //Default user.
+        DB::table('users')->insert([
+            'name' => "veljkos1234",
+            'email' => "veljkos1234@gmail.com",
+            'password' => Hash::make('tttt'),//Password je reč "tttt".
+            "role_id" => 1
+        ]);
+
     }
 
     /**
