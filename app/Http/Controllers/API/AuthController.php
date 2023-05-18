@@ -50,7 +50,7 @@ class AuthController extends Controller
         $accessToken = auth()->user()->createToken("authToken")->accessToken;
         $user = User::with("role", "vehicles.type", "utility")->find(auth()->user()->id);
     
-        return response(["Email is sent." , "user" => $user , "access_token" => $accessToken]);
+        return response(["Bravo." , "user" => $user , "access_token" => $accessToken]);
 
     }
 

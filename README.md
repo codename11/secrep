@@ -17,9 +17,16 @@ https://github.com/codename11/fe_secrep
 
  - Register user: `api/register`, method is `POST`. Has these fields: name, email, password, password_confirmation. All of them are required. It's `formData`.
 
+ Returns objects `user` with `name`, `email`, `updated_at`, `created_at` and  `id`. It also returns access token.
+
  - Login user: `api/login`, method is `POST`. Has these fields: email and password. All of them are required. It's `formData`.
 
+ Returns objects `message` which says `Bravo` if successfull. It also returns `user` with aditional fields such as `role_id`, which is by default `2`, alongside with subobject `role` which contains data about particular role. Another one is `vehicles` which is array of vehicles with own data, of which `type` is returned as subobject which is like a role but for vehicles.
+ Also it return, `utility` subobject which is about how many records per page is current user defined for custom reports.
+
  - Logout user: `api/logout`, method is `POST`. It doesn't have any fields. It's `formData`.
+
+ Returns message `Unauthenticated.`.
 
 #### Vehicle endpoints: 
 
@@ -32,6 +39,8 @@ https://github.com/codename11/fe_secrep
         "workOrg": "Alpha Trucking Co." //Not required
     }
 ```
+
+Return  message and paginated vehicle data. Individual vehicle subobject contains `id`, `registration`, `sec_id` which is an id of user that entered this vehicle, `vehicle_type_id`, `workOrganization_id`, `special_permission_id` etc. It also have subobject `work_organization` and `type`. And classic created at, updated at and deleted at.
 
  - Create a vehicle: `create_vehicle`, method is `POST` with parameters like registration number which is basically string of numbers of whatever format, an dedicated type(id) of that vehicle that draws values from another table and id that determines which organization it belongs to.
 
@@ -87,6 +96,8 @@ Example:
 
  - List work organizations: `list_work_organizations`, method is `POST` without parameters.
 
+ Returns message and paginated data with `id`, `name`, `sec_id`, with subobject `vehicles` who in turn have subobject `type`.
+
  - Show work organization: `show_work_organization`, method is `GET` with single parameter of `id` for getting specific organization.
 
  Example:
@@ -121,6 +132,8 @@ Example:
  - Create employee: `create_employee`, method is `POST`. This is little bit different. It also got an avatar which is basically an image which is uploaded for particular employee. Apart from that it also have an, `lastName`, `firstName`, `work_org_id`, `sec_id` fields. Last mentioned is `id` of security official who entered his info. All of them are required, except avatar image. There is default one until user decides to updates it. It's `formData`.
 
  - List employees: `list_employees`, method is `POST` without parameters.
+
+ Return message and paginated data with fields `id`, `lastName`, `firstName`, `work_org_id`, `sec_id`, `avatar` which is an image and have default one, `special_permission_id`, timestamps, subobjects: `work_organization`, `entered by`(sec_id) and `deliveries`.
 
  - Show employee: `show_employee`, method is `GET` with single parameter of `id`. It lists single employee.
 
@@ -164,6 +177,8 @@ Example:
 "delivery_notes" are notes for specific delivery. Can be anything.
 
  - List deliveries: `list_deliveries`, method is `POST` without parameters. List all deliveries.
+
+ Returns message and paginated data with all data already mentioned when you enter new delivery, alongside with subobjects `operator` with it's own subobject `work_organization`, `entered_by`(sec_id), `complement` which is what vehicles are sent to certain route with each vehicles subobjects of `type` and `work_organization`.
 
  - Show delivery: `show_delivery`, method is `GET` with single parameter of `id` for getting specific delivery.
 
@@ -214,6 +229,8 @@ Example:
  ```
 
  - List special permissions: `list_special_permissions`, method is `POST` without parameters.
+
+ Returns message and paginated data with `id`, `permission_name`, `permission_description`, `sec_id` and timestamps. There are also subobjects: `user` i.e. `sec_id`, `vehicles` and `employees`.
 
  - Show special permissions: `show_special_permissions`, method is `GET` with `id` for identifying specific one.
 
@@ -379,3 +396,8 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
 
  - List roles: `list_roles`, without parameters. Display roles.
  - Updated particular user role: `update_user_role` does as stated. Method is `PATCH` with `user_id` of a user and `new_role_id` as a new role.
+
+##### There is Postman collection json file for getting better look at it all, in root folder where is readme.md is(`security_report.postman_collection`).
+
+#### DB Schema:
+![DB_Schema](DB_Schema)
