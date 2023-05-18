@@ -400,4 +400,4 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
 ##### There is Postman collection json file for getting better look at it all, in root folder where is readme.md is(`security_report.postman_collection`).
 
 #### DB Schema:
-![DB_Schema](DB_Schema)
+![DB_Schema](DB_Schema.png)
