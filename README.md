@@ -397,7 +397,8 @@ Tables such: `vehicle_pivot` are for entering types of vehicles and `delivery_de
  - List roles: `list_roles`, without parameters. Display roles.
  - Updated particular user role: `update_user_role` does as stated. Method is `PATCH` with `user_id` of a user and `new_role_id` as a new role.
 
-##### There is Postman collection json file for getting better look at it all, in root folder where is readme.md is(`security_report.postman_collection`).
+##### There is Postman collection json file for getting better look at it all, in root folder where is readme.md is <a href="security_report.postman_collection.json" download>`security_report.postman_collection`</a>.
+
 
 #### DB Schema:
 ![DB_Schema](DB_Schema.png)
