@@ -2,10 +2,6 @@
 
 ## An api for security / monitoring persons and vehicles entering and leaving facilities. Very customizable.
 
-### Postman collection access key url: 
-```
-https://api.postman.com/collections/11409093-b4736cc6-47d7-4d27-b681-8f3a8de18264?access_key=PMAT-01GXZXWAMH65CSKRQZZCQW5CW2
-```
 ### An frontend for this api:
 ```
 https://github.com/codename11/fe_secrep
